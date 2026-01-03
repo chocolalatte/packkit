@@ -1,0 +1,11 @@
+schema_version = 1.0
+
+[defaults]
+file = "name.jar"
+side = ["both"]
+required = true
+recommended = false
+performance = false
+heavy = false
+loader = ["Unknown"]
+note = ""
