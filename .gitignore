@@ -1,2 +1,4 @@
+.gitignore
 /mods
-/manifest.toml
+manifest.toml
+manifest-old.toml

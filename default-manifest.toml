@@ -1,0 +1,17 @@
+schema_version = 1.1
+
+[mods.modId]
+name = "unknown"
+notes = [""]
+priority = 0
+
+file = "aether-1.20.1-1.5.2-neoforge.jar"
+version = "unknown"
+loader = "unknown"
+side = "unknown"
+
+importance = "required"
+impact = "heavy"
+
+requirements = ["unknown"]
+recommends = ["unknown"]
