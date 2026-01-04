@@ -1,17 +1,17 @@
-schema_version = 1.1
+[header]
+schema_version = "2.0.0"
+pack_version = "0.0.0"
 
-[mods.modId]
-name = "unknown"
-notes = [""]
-priority = 0
+[customization]
+tag_categories = []
 
-file = "aether-1.20.1-1.5.2-neoforge.jar"
-version = "unknown"
-loader = "unknown"
-side = "unknown"
+[customization.standard_tags.simple]
+favorite = { description = "Marks mod as favorite"}
 
-importance = "required"
-impact = "heavy"
+[customization.standard_tags.value]
+importance = ["required", "recommended", "optional"]
+impact = ["light", "heavy", "performance"]
 
-requirements = ["unknown"]
-recommends = ["unknown"]
+[customization.default_tags.simple]
+
+[customization.default_tags.value]
