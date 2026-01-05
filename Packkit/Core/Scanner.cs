@@ -55,6 +55,7 @@ public class Scanner
                 else if (jar.GetEntry("fabric.mod.json") is ZipArchiveEntry fabricEntry)
                 {
                     modEntry = Parser.ParseFabric(fabricEntry, modFile);
+                    manifest.Mods[fileHash] = modEntry;
 
                     fabricModCount++;
                     Console.WriteLine(

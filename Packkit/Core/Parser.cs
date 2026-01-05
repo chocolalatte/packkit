@@ -38,12 +38,66 @@ public class Parser
         return modEntry;
     }
 
-    public static ModEntry? ParseFabric(ZipArchiveEntry modsJson, string fileName)
+    public static ModEntry? ParseFabric(ZipArchiveEntry modsJson, string filePath)
     {
-        string content = new StreamReader(modsJson.Open()).ReadToEnd();
-        TomlTable model = Toml.ToModel(content);
+        using StreamReader reader = new(modsJson.Open());
+        string json = reader.ReadToEnd();
 
-        using JsonDocument doc = JsonDocument.Parse(content);
-        return null;
+        using JsonDocument document = JsonDocument.Parse(json);
+        JsonElement root = document.RootElement;
+
+        string? id = root.TryGetProperty("id", out var idProperty) ? idProperty.GetString() : null;
+
+        string? name = root.TryGetProperty("name", out var nameProp) ? nameProp.GetString() : null;
+
+        string? version = root.TryGetProperty("version", out var verProp)
+            ? verProp.GetString()
+            : null;
+
+        ModSide side = ModSide.unknown;
+        if (root.TryGetProperty("environment", out var environmentProperty))
+        {
+            side = environmentProperty.GetString() switch
+            {
+                "client" => ModSide.client,
+                "server" => ModSide.server,
+                "*" => ModSide.both,
+                _ => ModSide.unknown,
+            };
+        }
+
+        ModEntry modEntry = new()
+        {
+            ModId = id,
+            Name = name,
+            Version = version,
+            File = Path.GetFileName(filePath),
+            Loader = ModLoader.fabric,
+            Side = side,
+        };
+
+        if (
+            root.TryGetProperty("depends", out var depends)
+            && depends.ValueKind == JsonValueKind.Object
+        )
+        {
+            foreach (var depend in depends.EnumerateObject())
+            {
+                modEntry.Requires.Add(depend.Name);
+            }
+        }
+
+        if (
+            root.TryGetProperty("reccomends", out var reccomends)
+            && reccomends.ValueKind == JsonValueKind.Object
+        )
+        {
+            foreach (var recomend in reccomends.EnumerateObject())
+            {
+                modEntry.Recommends.Add(recomend.Name);
+            }
+        }
+
+        return modEntry;
     }
 }
