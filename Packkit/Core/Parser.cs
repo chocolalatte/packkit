@@ -9,70 +9,84 @@ namespace Packkit.Core;
 
 public class Parser
 {
-    public static ModEntry? ParseForge(ZipArchiveEntry modsToml, string filePath)
+    public static ModEntry ParseForge(ZipArchiveEntry modsToml, string filePath)
     {
-        using StreamReader reader = new(modsToml.Open());
-        string content = reader.ReadToEnd();
-
-        TomlTable model = Toml.ToModel(content);
-        var modsArray =
-            model.TryGetValue("mods", out var modsObj) && modsObj is TomlTableArray array
-                ? array
-                : null;
-
-        if (modsArray == null || modsArray.Count == 0)
+        try
         {
-            return null;
-        }
+            using StreamReader reader = new(modsToml.Open());
+            string content = reader.ReadToEnd();
 
-        var mod = (TomlTable)modsArray[0];
+            TomlTable model = Toml.ToModel(content);
+            var modsArray =
+                model.TryGetValue("mods", out var modsObj) && modsObj is TomlTableArray array
+                    ? array
+                    : null;
 
-        ModEntry modEntry = new()
-        {
-            ModId = mod.TryGetValue("modId", out var id) ? id.ToString() : null,
-            Name = mod.TryGetValue("displayName", out var name) ? name.ToString() : null,
-            File = Path.GetFileName(filePath),
-            Version = mod.TryGetValue("version", out var ver) ? ver.ToString() : null, // Fix issue with forge version showing "{file.jarVersion}"
-            Loader = ModLoader.forge,
-            Side = ModSide.unknown,
-        };
+            // Uses fallback if there is no "mods" field or if there are no mods in the field
+            var mod =
+                modsArray?.FirstOrDefault()
+                ?? throw new Exception(
+                    "[PARSER] [ERROR-001] No \"mods\" field found in TOML, using fallback"
+                );
 
-        // Dependency handling
-        if (
-            model.TryGetValue("dependencies", out var dependenciesObject)
-            && dependenciesObject is TomlTable dependenciesTable
-        )
-        {
+            ModEntry modEntry = new()
+            {
+                ModId = mod.TryGetValue("modId", out var id) ? id.ToString() : null,
+                Name = mod.TryGetValue("displayName", out var name) ? name.ToString() : null,
+                File = Path.GetFileName(filePath),
+                Version = mod.TryGetValue("version", out var ver) ? ver.ToString() : null, // Fix issue with forge version showing "{file.jarVersion}"
+                Loader = ModLoader.forge,
+                Side = ModSide.unknown,
+            };
+
+            // Dependency handling
             if (
-                modEntry.ModId != null
-                && dependenciesTable.TryGetValue(modEntry.ModId, out var modDependenciesObject)
-                && modDependenciesObject is TomlTableArray modDependenciesArray
+                model.TryGetValue("dependencies", out var dependenciesObject)
+                && dependenciesObject is TomlTable dependenciesTable
             )
             {
-                foreach (TomlTable dependency in modDependenciesArray)
+                if (
+                    modEntry.ModId != null
+                    && dependenciesTable.TryGetValue(modEntry.ModId, out var modDependenciesObject)
+                    && modDependenciesObject is TomlTableArray modDependenciesArray
+                )
                 {
-                    string? dependencyId = dependency.TryGetValue(
-                        "modId",
-                        out var dependencyIdObject
-                    )
-                        ? dependencyIdObject.ToString()
-                        : null;
-                    bool mandatory =
-                        dependency.TryGetValue("mandatory", out var mandObj)
-                        && mandObj.ToString().ToLower() == "true";
-
-                    if (!string.IsNullOrEmpty(dependencyId))
+                    foreach (TomlTable dependency in modDependenciesArray)
                     {
-                        if (mandatory)
-                            modEntry.Requires.Add(dependencyId);
-                        else
-                            modEntry.Recommends.Add(dependencyId);
+                        string? dependencyId = dependency.TryGetValue(
+                            "modId",
+                            out var dependencyIdObject
+                        )
+                            ? dependencyIdObject.ToString()
+                            : null;
+                        bool mandatory =
+                            dependency.TryGetValue("mandatory", out var mandatoryObject)
+                            && mandatoryObject.ToString()?.ToLower() == "true";
+
+                        if (!string.IsNullOrEmpty(dependencyId))
+                        {
+                            if (mandatory)
+                                modEntry.Requires.Add(dependencyId);
+                            else
+                                modEntry.Recommends.Add(dependencyId);
+                        }
                     }
                 }
             }
+            return modEntry;
         }
-
-        return modEntry;
+        catch
+        {
+            return new ModEntry
+            {
+                File = Path.GetFileName(filePath),
+                ModId = Path.GetFileNameWithoutExtension(filePath),
+                Name = Path.GetFileNameWithoutExtension(filePath),
+                Version = "unknown",
+                Loader = ModLoader.forge,
+                Side = ModSide.unknown,
+            };
+        }
     }
 
     public static ModEntry? ParseFabric(ZipArchiveEntry modsJson, string filePath)

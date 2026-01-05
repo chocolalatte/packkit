@@ -16,48 +16,53 @@ public class Scanner
     public static void ScanFiles(string modsDirectoryPath = @"../mods")
     {
         Manifest manifest = Manifest.LoadFromFile(@"../manifest.toml");
-        int totalFileCount;
-
-        int failedScanCount = 0;
-        int forgeModCount = 0;
-        int fabricModCount = 0;
-
-        int scannedFileCount()
-        {
-            return forgeModCount + fabricModCount + failedScanCount;
-        }
-
         var modsDirectory = Directory.EnumerateFiles(modsDirectoryPath);
 
-        totalFileCount = modsDirectory.Count();
+        // Variables for keeping track of progress
+        int totalFileCount = modsDirectory.Count();
+        int failedScanCount = 0;
+        int forgeModsScannedCount = 0;
+        int fabricModsScannedCount = 0;
 
-        foreach (var modFile in modsDirectory)
+        // Function to return the total number of files scanned
+        int scannedFileCount()
         {
-            string fileHash = Hasher.Hash(modFile);
-            string fileName = Path.GetFileName(modFile);
+            return forgeModsScannedCount + fabricModsScannedCount + failedScanCount;
+        }
+
+        foreach (var file in modsDirectory)
+        {
+            string fileHash = Hasher.Hash(file);
+            string fileName = Path.GetFileName(file);
             ModEntry? modEntry = null;
 
             try
             {
-                using var stream = File.OpenRead(modFile);
+                using var stream = File.OpenRead(file);
                 using var jar = new ZipArchive(stream, ZipArchiveMode.Read);
 
+                // Scan forge mod toml file
                 if (jar.GetEntry("META-INF/mods.toml") is ZipArchiveEntry forgeEntry)
                 {
-                    modEntry = Parser.ParseForge(forgeEntry, modFile);
-                    manifest.Mods[fileHash] = modEntry;
+                    // Parse data and add <fileHash, modEntry> to manifest's mods dictonary
+                    modEntry = Parser.ParseForge(forgeEntry, file);
+                    manifest.Mods[fileHash] = modEntry!;
 
-                    forgeModCount++;
+                    // Log progress
+                    forgeModsScannedCount++;
                     Console.WriteLine(
                         $"[{scannedFileCount()}/{totalFileCount}] [SCANNER] [INFO] Forge mod scanned: {fileName}"
                     );
                 }
+                // Scan fabric mod json file
                 else if (jar.GetEntry("fabric.mod.json") is ZipArchiveEntry fabricEntry)
                 {
-                    modEntry = Parser.ParseFabric(fabricEntry, modFile);
-                    manifest.Mods[fileHash] = modEntry;
+                    // Parse data and add <fileHash, modEntry> to manifest's mods dictonary
+                    modEntry = Parser.ParseFabric(fabricEntry, file);
+                    manifest.Mods[fileHash] = modEntry!;
 
-                    fabricModCount++;
+                    // Log progress
+                    fabricModsScannedCount++;
                     Console.WriteLine(
                         $"[{scannedFileCount()}/{totalFileCount}] [SCANNER] [INFO] Fabric mod scanned: {fileName}"
                     );
@@ -65,6 +70,7 @@ public class Scanner
             }
             catch
             {
+                // Log progress
                 failedScanCount++;
                 Console.WriteLine(
                     $"[{scannedFileCount()}/{totalFileCount}] [SCANNER] [ERROR-001] failed to scan file: {fileName}"
@@ -72,8 +78,9 @@ public class Scanner
             }
         }
 
+        // Summary of the scan
         Console.WriteLine(
-            $"[SCANNER] [INFO] {fabricModCount + forgeModCount} mods scanned out of {totalFileCount} files in folder: {failedScanCount} failed scan(s)"
+            $"[SCANNER] [INFO] {fabricModsScannedCount + forgeModsScannedCount} mods scanned out of {totalFileCount} files in folder: {failedScanCount} failed scan(s)"
         );
 
         manifest.SaveToFile();

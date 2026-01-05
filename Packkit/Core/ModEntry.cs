@@ -13,14 +13,7 @@ public partial class ModEntry : ObservableObject
     public ModLoader Loader { get; set; } = ModLoader.unknown;
     public ModSide Side { get; set; } = ModSide.unknown;
 
-    [ObservableProperty]
-    private ModImportance importance = ModImportance.unknown;
-
-    [ObservableProperty]
-    private ModImpact impact = ModImpact.unknown;
-
     public List<string> Notes { get; set; } = [];
-    public int Priority { get; set; } = 0;
 
     public List<string> Requires { get; set; } = [];
     public List<string> Recommends { get; set; } = [];
@@ -29,8 +22,14 @@ public partial class ModEntry : ObservableObject
 
 public class ModTags
 {
+    // Simple user defined tags, e.g. "technology", "decoration", etc.
     public List<string> SimpleTags { get; set; } = [];
-    public Dictionary<string, string> ValueTags { get; set; } = [];
+
+    // User defined tags with value pairs, e.g. priority = 0
+    public Dictionary<string, object> ValueTags { get; set; } = [];
+
+    // User defined tags with enum values, e.g. decoration-type = "building blocks" || "furniture"
+    public Dictionary<string, string[]> EnumTags { get; set; } = [];
 }
 
 public enum ModLoader
