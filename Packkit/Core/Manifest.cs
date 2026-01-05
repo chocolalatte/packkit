@@ -16,7 +16,7 @@ namespace Packkit.Core
         public static Manifest LoadFromFile(string path)
         {
             if (!File.Exists(path))
-                throw new FileNotFoundException($"Manifest not found: {path}");
+                throw new FileNotFoundException($"[MANIFEST] [ERROR-001] Manifest not found: {path}");
 
             string tomlText = File.ReadAllText(path);
             return Toml.ToModel<Manifest>(tomlText);
@@ -55,7 +55,7 @@ namespace Packkit.Core
             var assembly = Assembly.GetExecutingAssembly();
             string resourceName = "Packkit.Core.base-manifest.toml";
 
-            using Stream? stream = assembly.GetManifestResourceStream(resourceName) ?? throw new FileNotFoundException($"Embedded resource '{resourceName}' not found.");
+            using Stream? stream = assembly.GetManifestResourceStream(resourceName) ?? throw new FileNotFoundException($"[MANIFEST] [ERROR-002] Embedded resource '{resourceName}' not found.");
             using StreamReader reader = new(stream);
             string tomlText = reader.ReadToEnd();
 
@@ -68,7 +68,7 @@ namespace Packkit.Core
                 }
             }
 
-            throw new Exception("schema_version not found in embedded manifest");
+            throw new Exception("[MANIFEST] [ERROR-003] schema_version not found in embedded manifest");
         }
     }
 }

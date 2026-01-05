@@ -2,6 +2,7 @@ bin/
 obj/
 out/
 .vscode/
+packkit.sln
 
 /mods
 manifest.toml
