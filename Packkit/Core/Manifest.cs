@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Reflection;
 using Microsoft.VisualBasic;
@@ -24,6 +25,8 @@ public class Manifest
 
     public void SaveToFile(string path = "../manifest.toml")
     {
+        Header.Update();
+
         string tomlText = Toml.FromModel(this);
 
         var lines = tomlText.Split('\n');
@@ -45,8 +48,15 @@ public class Manifest
 
 public class Header
 {
+    public void Update()
+    {
+        LastUpdatedAt = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssZ");
+    }
+
     public string SchemaVersion { get; set; } = ManifestUtils.GetSchemaVersionFromEmbedded();
     public string PackVersion { get; set; } = "1.0.0";
+    public string CreatedAt { get; set; } = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssZ");
+    public string LastUpdatedAt { get; set; } = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssZ");
 }
 
 public static class ManifestUtils
