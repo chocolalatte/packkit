@@ -2,6 +2,7 @@ using System.Dynamic;
 using System.IO.Compression;
 using System.IO.Enumeration;
 using System.Net.Http.Json;
+using System.Net.Mime;
 using Microsoft.VisualBasic;
 using Tomlyn;
 using Tomlyn.Model;
@@ -14,6 +15,7 @@ public class Scanner
     // TODO: Parse both files and determine the actual loader
     public static void ScanFiles(string modsDirectoryPath = @"../mods")
     {
+        Manifest manifest = Manifest.LoadFromFile(@"../manifest.toml");
         int totalFileCount;
 
         int failedScanCount = 0;
@@ -31,7 +33,9 @@ public class Scanner
 
         foreach (var modFile in modsDirectory)
         {
+            string fileHash = Hasher.Hash(modFile);
             string fileName = Path.GetFileName(modFile);
+            ModEntry? modEntry = null;
 
             try
             {
@@ -40,16 +44,19 @@ public class Scanner
 
                 if (jar.GetEntry("META-INF/mods.toml") is ZipArchiveEntry forgeEntry)
                 {
+                    modEntry = Parser.ParseForge(forgeEntry, modFile);
+                    manifest.Mods[fileHash] = modEntry;
+
                     forgeModCount++;
-                    ScanForgeEntry(forgeEntry);
                     Console.WriteLine(
                         $"[{scannedFileCount()}/{totalFileCount}] [SCANNER] [INFO] Forge mod scanned: {fileName}"
                     );
                 }
                 else if (jar.GetEntry("fabric.mod.json") is ZipArchiveEntry fabricEntry)
                 {
+                    modEntry = Parser.ParseFabric(fabricEntry, modFile);
+
                     fabricModCount++;
-                    ScanFabricEntry(fabricEntry);
                     Console.WriteLine(
                         $"[{scannedFileCount()}/{totalFileCount}] [SCANNER] [INFO] Fabric mod scanned: {fileName}"
                     );
@@ -67,33 +74,7 @@ public class Scanner
         Console.WriteLine(
             $"[SCANNER] [INFO] {fabricModCount + forgeModCount} mods scanned out of {totalFileCount} files in folder: {failedScanCount} failed scan(s)"
         );
-    }
 
-    private static void ScanForgeEntry(ZipArchiveEntry forgeEntry)
-    {
-        using var reader = new StreamReader(forgeEntry.Open());
-        string modsToml = reader.ReadToEnd();
-
-        TomlTable model = Toml.ToModel(modsToml);
-
-        if (!model.TryGetValue("mods", out var modsObj))
-            return;
-
-        if (modsObj is not TomlTableArray modsArray)
-            return;
-
-        foreach (TomlTable mod in modsArray)
-        {
-            if (mod.TryGetValue("modId", out var idObj))
-            {
-                string? modId = idObj.ToString();
-            }
-        }
-    }
-
-    private static void ScanFabricEntry(ZipArchiveEntry fabricEntry)
-    {
-        using var reader = new StreamReader(fabricEntry.Open());
-        string modsJson = reader.ReadToEnd();
+        manifest.SaveToFile();
     }
 }

@@ -22,7 +22,7 @@ public class Manifest
         return Toml.ToModel<Manifest>(tomlText);
     }
 
-    public void SaveToFile(string path)
+    public void SaveToFile(string path = "../manifest.toml")
     {
         string tomlText = Toml.FromModel(this);
 
