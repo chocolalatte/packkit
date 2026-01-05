@@ -1,5 +1,7 @@
 using System.IO.Compression;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
+using Microsoft.VisualBasic;
 using Tomlyn;
 using Tomlyn.Model;
 
@@ -34,6 +36,41 @@ public class Parser
             Loader = ModLoader.forge,
             Side = ModSide.unknown,
         };
+
+        // Dependency handling
+        if (
+            model.TryGetValue("dependencies", out var dependenciesObject)
+            && dependenciesObject is TomlTable dependenciesTable
+        )
+        {
+            if (
+                modEntry.ModId != null
+                && dependenciesTable.TryGetValue(modEntry.ModId, out var modDependenciesObject)
+                && modDependenciesObject is TomlTableArray modDependenciesArray
+            )
+            {
+                foreach (TomlTable dependency in modDependenciesArray)
+                {
+                    string? dependencyId = dependency.TryGetValue(
+                        "modId",
+                        out var dependencyIdObject
+                    )
+                        ? dependencyIdObject.ToString()
+                        : null;
+                    bool mandatory =
+                        dependency.TryGetValue("mandatory", out var mandObj)
+                        && mandObj.ToString().ToLower() == "true";
+
+                    if (!string.IsNullOrEmpty(dependencyId))
+                    {
+                        if (mandatory)
+                            modEntry.Requires.Add(dependencyId);
+                        else
+                            modEntry.Recommends.Add(dependencyId);
+                    }
+                }
+            }
+        }
 
         return modEntry;
     }
