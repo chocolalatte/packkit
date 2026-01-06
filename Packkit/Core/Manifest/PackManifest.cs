@@ -1,4 +1,5 @@
 using Tomlyn;
+using Tomlyn.Model;
 
 namespace Packkit.Core.Manifest;
 
@@ -22,18 +23,7 @@ public class PackManifest
                 $"[MANIFEST] [WARN] Manifest not found: {path}, defaulting to base-manifest.toml"
             );
 
-            try
-            {
-                tomlText = Toml.FromModel(CreateManifestFromBase());
-            }
-            catch (Exception exception)
-            {
-                throw new FileNotFoundException(
-                    $"[MANIFEST] [ERROR-001] base-manifest not found: {Defaults.BaseManifestResourceName}",
-                    Defaults.BaseManifestResourceName,
-                    exception
-                );
-            }
+            tomlText = Toml.FromModel(CreateManifestFromBase());
         }
 
         return Toml.ToModel<PackManifest>(tomlText);
