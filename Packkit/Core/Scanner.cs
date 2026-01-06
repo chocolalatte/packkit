@@ -4,6 +4,7 @@ using System.IO.Enumeration;
 using System.Net.Http.Json;
 using System.Net.Mime;
 using Microsoft.VisualBasic;
+using Packkit.Core.Manifest;
 using Tomlyn;
 using Tomlyn.Model;
 
@@ -15,7 +16,7 @@ public class Scanner
     // TODO: Parse both files and determine the actual loader
     public static void ScanFiles(string modsDirectoryPath = @"../mods")
     {
-        Manifest manifest = Manifest.LoadFromFile(@"../manifest.toml");
+        PackManifest manifest = PackManifest.LoadFromFile(@"../manifest.toml");
         var modsDirectory = Directory.EnumerateFiles(modsDirectoryPath);
 
         // Variables for keeping track of progress
@@ -30,6 +31,7 @@ public class Scanner
             return forgeModsScannedCount + fabricModsScannedCount + failedScanCount;
         }
 
+        // Main loop
         foreach (var file in modsDirectory)
         {
             string fileHash = Hasher.Hash(file);

@@ -2,6 +2,7 @@ using System.IO.Compression;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Microsoft.VisualBasic;
+using Packkit.Core.Manifest;
 using Tomlyn;
 using Tomlyn.Model;
 

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Packkit.Core;
+namespace Packkit.Core.Manifest;
 
 public partial class ModEntry : ObservableObject
 {
@@ -17,19 +17,15 @@ public partial class ModEntry : ObservableObject
 
     public List<string> Requires { get; set; } = [];
     public List<string> Recommends { get; set; } = [];
-    public ModTags Tags { get; set; } = new ModTags();
+
+    public ModTags Tags { get; set; } = new();
 }
 
 public class ModTags
 {
-    // Simple user defined tags, e.g. "technology", "decoration", etc.
-    public List<string> SimpleTags { get; set; } = [];
-
-    // User defined tags with value pairs, e.g. priority = 0
-    public Dictionary<string, object> ValueTags { get; set; } = [];
-
-    // User defined tags with enum values, e.g. decoration-type = "building blocks" || "furniture"
-    public Dictionary<string, string[]> EnumTags { get; set; } = [];
+    public HashSet<string> Simple { get; set; } = [];
+    public Dictionary<string, object> Value { get; set; } = [];
+    public Dictionary<string, string> Enum { get; set; } = [];
 }
 
 public enum ModLoader

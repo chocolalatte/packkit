@@ -1,9 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
-using Packkit.Core;
+﻿using Packkit.Core;
+using Packkit.Core.Manifest;
 
 namespace Packkit
 {
@@ -11,6 +7,7 @@ namespace Packkit
     {
         static void Main()
         {
+            // Utils.SaveBaseManifest();
             Scanner.ScanFiles();
         }
     }

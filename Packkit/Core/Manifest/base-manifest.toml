@@ -1,0 +1,26 @@
+[header]
+schema_version = "2.4.0"
+pack_version = "1.0.0"
+created_at = "2026-01-06T08:24:09Z"
+last_updated_at = "2026-01-06T08:24:09Z"
+[customization]
+[customization.tags]
+[[customization.tags.simple_tags]]
+name = "favorite"
+description = "Toggle favorite mods"
+
+[[customization.tags.value_tags]]
+name = "priority"
+description = "Priority of the mod, lower number means higher priority, default is 0"
+default_value = 0
+
+[[customization.tags.enum_tags]]
+name = "importance"
+description = "Importance of the mod"
+options = ["required", "recommended", "optional"]
+[[customization.tags.enum_tags]]
+name = "impact"
+description = "Impact of the mod"
+options = ["light", "heavy", "performance"]
+
+[mods]
