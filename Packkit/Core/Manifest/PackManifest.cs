@@ -11,11 +11,10 @@ public class PackManifest
 
     public static PackManifest LoadFromFile(string path)
     {
-        string tomlText;
-
         if (File.Exists(path))
         {
-            tomlText = File.ReadAllText(path);
+            // Load manifest from path
+            return Toml.ToModel<PackManifest>(File.ReadAllText(path));
         }
         else
         {
@@ -23,15 +22,9 @@ public class PackManifest
                 $"[MANIFEST] [WARN] Manifest not found: {path}, defaulting to base-manifest.toml"
             );
 
-            tomlText = Toml.FromModel(CreateManifestFromBase());
+            // Create new manifest.toml from base-manifest copy
+            return Toml.ToModel<PackManifest>(Defaults.BaseManifest);
         }
-
-        return Toml.ToModel<PackManifest>(tomlText);
-    }
-
-    public static PackManifest CreateManifestFromBase()
-    {
-        return Toml.ToModel<PackManifest>(Defaults.BaseManifest);
     }
 
     public void SaveToFile(string path = "../manifest.toml")
