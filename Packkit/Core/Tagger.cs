@@ -16,9 +16,7 @@ public static class Tagger
         // Check if tag exists in manifest's tag definitions
         if (simpleTagDefinitions.Any(t => t.Name == tag))
         {
-            bool tagAdded = modEntry.Tags.Simple.Add(tag);
-
-            if (!tagAdded)
+            if (modEntry.Tags.Simple.Contains(tag))
             {
                 Console.WriteLine(
                     $"[MANIFEST:TAGGER] [WARN] Tag {tag} already exists in {modEntry.Name}"
@@ -26,6 +24,8 @@ public static class Tagger
             }
             else
             {
+                modEntry.Tags.Simple.Add(tag);
+
                 Console.WriteLine($"[MANIFEST:TAGGER] [INFO] Added tag {tag} to {modEntry.Name}");
                 if (save)
                     manifest.SaveToFile();

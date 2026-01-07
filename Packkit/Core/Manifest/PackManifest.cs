@@ -9,12 +9,32 @@ public class PackManifest
     public Customization Customization { get; set; } = new Customization();
     public Dictionary<string, ModEntry> Mods { get; set; } = [];
 
+    public void Initialize()
+    {
+        Mods ??= new Dictionary<string, ModEntry>();
+
+        foreach (var mod in Mods.Values)
+        {
+            mod.Tags ??= new ModTags();
+
+            mod.Tags.Simple ??= new List<string>();
+            mod.Tags.Value ??= new Dictionary<string, object>();
+            mod.Tags.Enum ??= new Dictionary<string, string>();
+
+            mod.Notes ??= new List<string>();
+            mod.Requires ??= new List<string>();
+            mod.Recommends ??= new List<string>();
+        }
+    }
+
     public static PackManifest LoadFromFile(string path)
     {
+        PackManifest model;
+
         if (File.Exists(path))
         {
             // Load manifest from path
-            return Toml.ToModel<PackManifest>(File.ReadAllText(path));
+            model = Toml.ToModel<PackManifest>(File.ReadAllText(path));
         }
         else
         {
@@ -23,8 +43,11 @@ public class PackManifest
             );
 
             // Create new manifest.toml from base-manifest copy
-            return Toml.ToModel<PackManifest>(Defaults.BaseManifest);
+            model = Defaults.CreateManifestFromBase();
         }
+
+        model.Initialize();
+        return model;
     }
 
     public void SaveToFile(string path = "../manifest.toml")

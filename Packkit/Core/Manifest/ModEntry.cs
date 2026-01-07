@@ -23,7 +23,7 @@ public partial class ModEntry : ObservableObject
 
 public class ModTags
 {
-    public HashSet<string> Simple { get; set; } = [];
+    public List<string> Simple { get; set; } = [];
     public Dictionary<string, object> Value { get; set; } = [];
     public Dictionary<string, string> Enum { get; set; } = [];
 }
