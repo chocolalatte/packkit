@@ -14,6 +14,7 @@ public class Scanner
 {
     // Some files may have both a mods.toml and a fabric.mod.json
     // TODO: Parse both files and determine the actual loader
+    // TODO: Add support for other loaders
     public static void ScanFiles(string modsDirectoryPath = @"../mods")
     {
         PackManifest manifest = PackManifest.LoadFromFile(@"../manifest.toml");
@@ -22,13 +23,12 @@ public class Scanner
         // Variables for keeping track of progress
         int totalFileCount = modsDirectory.Count();
         int failedScanCount = 0;
-        int forgeModsScannedCount = 0;
-        int fabricModsScannedCount = 0;
+        int modsScannedCount = 0;
 
         // Function to return the total number of files scanned
         int scannedFileCount()
         {
-            return forgeModsScannedCount + fabricModsScannedCount + failedScanCount;
+            return modsScannedCount + failedScanCount;
         }
 
         // Main loop
@@ -43,6 +43,16 @@ public class Scanner
                 using var stream = File.OpenRead(file);
                 using var jar = new ZipArchive(stream, ZipArchiveMode.Read);
 
+                if (manifest.Mods.ContainsKey(fileHash))
+                {
+                    modsScannedCount++;
+                    // Log progress
+                    Console.WriteLine(
+                        $"[{scannedFileCount()}/{totalFileCount}] [SCANNER] [INFO] File already in manifest: {fileName}"
+                    );
+                    continue;
+                }
+
                 // Scan forge mod toml file
                 if (jar.GetEntry("META-INF/mods.toml") is ZipArchiveEntry forgeEntry)
                 {
@@ -51,7 +61,7 @@ public class Scanner
                     manifest.Mods[fileHash] = modEntry!;
 
                     // Log progress
-                    forgeModsScannedCount++;
+                    modsScannedCount++;
                     Console.WriteLine(
                         $"[{scannedFileCount()}/{totalFileCount}] [SCANNER] [INFO] Forge mod scanned: {fileName}"
                     );
@@ -64,7 +74,7 @@ public class Scanner
                     manifest.Mods[fileHash] = modEntry!;
 
                     // Log progress
-                    fabricModsScannedCount++;
+                    modsScannedCount++;
                     Console.WriteLine(
                         $"[{scannedFileCount()}/{totalFileCount}] [SCANNER] [INFO] Fabric mod scanned: {fileName}"
                     );
@@ -82,7 +92,7 @@ public class Scanner
 
         // Summary of the scan
         Console.WriteLine(
-            $"[SCANNER] [INFO] {fabricModsScannedCount + forgeModsScannedCount} mods scanned out of {totalFileCount} files in folder: {failedScanCount} failed scan(s)"
+            $"[SCANNER] [INFO] {modsScannedCount} mods scanned out of {totalFileCount} files in folder: {failedScanCount} failed scan(s)"
         );
 
         manifest.SaveToFile();

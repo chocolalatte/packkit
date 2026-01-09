@@ -9,6 +9,7 @@ public class PackManifest
     public Customization Customization { get; set; } = new Customization();
     public Dictionary<string, ModEntry> Mods { get; set; } = [];
 
+    // Check if Initialize is still needed, error was because a HashSet was used, which is unsupported by toml
     public void Initialize()
     {
         Mods ??= new Dictionary<string, ModEntry>();

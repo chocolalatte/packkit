@@ -2,6 +2,7 @@ using Packkit.Core.Manifest;
 
 namespace Packkit.Core;
 
+// TODO: Add methods for value and enum tags
 public static class Sorter
 {
     public static IEnumerable<ModEntry> WithSimpleTags(

@@ -1,3 +1,4 @@
+using System.Xml.Linq;
 using Packkit.Core.Manifest;
 
 namespace Packkit.Core;
