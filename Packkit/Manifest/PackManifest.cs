@@ -1,7 +1,7 @@
 using Tomlyn;
 using Tomlyn.Model;
 
-namespace Packkit.Core.Manifest;
+namespace Packkit.Manifest;
 
 public class PackManifest
 {

@@ -4,7 +4,7 @@ using System.IO.Enumeration;
 using System.Net.Http.Json;
 using System.Net.Mime;
 using Microsoft.VisualBasic;
-using Packkit.Core.Manifest;
+using Packkit.Manifest;
 using Tomlyn;
 using Tomlyn.Model;
 

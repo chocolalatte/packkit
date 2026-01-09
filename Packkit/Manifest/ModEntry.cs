@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Packkit.Core.Manifest;
+namespace Packkit.Manifest;
 
 public partial class ModEntry : ObservableObject
 {
@@ -42,20 +42,4 @@ public enum ModSide
     client,
     server,
     both,
-}
-
-public enum ModImportance
-{
-    unknown,
-    required,
-    recommended,
-    optional,
-}
-
-public enum ModImpact
-{
-    unknown,
-    light,
-    heavy,
-    performance,
 }

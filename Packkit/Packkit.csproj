@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Core\Manifest\base-manifest.toml" />
+    <EmbeddedResource Include="Manifest\base-manifest.toml" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Tomlyn" Version="0.19.0" />
   </ItemGroup>

@@ -2,11 +2,11 @@ using System.Reflection;
 using Tomlyn;
 using Tomlyn.Model;
 
-namespace Packkit.Core.Manifest;
+namespace Packkit.Manifest;
 
 public static class Defaults
 {
-    public const string BaseManifestResourceName = "Packkit.Core.Manifest.base-manifest.toml";
+    public const string BaseManifestResourceName = "Packkit.Manifest.base-manifest.toml";
 
     private static string? _baseManifest = null;
     private static string? _schemaVersion = null;

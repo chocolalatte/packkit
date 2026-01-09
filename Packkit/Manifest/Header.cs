@@ -1,4 +1,4 @@
-namespace Packkit.Core.Manifest;
+namespace Packkit.Manifest;
 
 public class Header
 {

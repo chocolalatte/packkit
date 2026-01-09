@@ -1,9 +1,10 @@
 using System;
 using System.ComponentModel;
 using System.IO;
+using Packkit.Tags;
 using Tomlyn;
 
-namespace Packkit.Core.Manifest;
+namespace Packkit.Manifest;
 
 public static class Utils
 {
@@ -13,7 +14,7 @@ public static class Utils
         {
             SimpleTags =
             [
-                new Customization.SimpleTagDefinition
+                new TagDefinitions.SimpleTagDefinition
                 {
                     Name = "favorite",
                     Description = "Toggle favorite mods",
@@ -21,7 +22,7 @@ public static class Utils
             ],
             ValueTags =
             [
-                new Customization.ValueTagDefinition
+                new TagDefinitions.ValueTagDefinition
                 {
                     Name = "priority",
                     Description =
@@ -31,13 +32,13 @@ public static class Utils
             ],
             EnumTags =
             [
-                new Customization.EnumTagDefinition
+                new TagDefinitions.EnumTagDefinition
                 {
                     Name = "importance",
                     Description = "Importance of the mod",
                     Options = ["required", "recommended", "optional"],
                 },
-                new Customization.EnumTagDefinition
+                new TagDefinitions.EnumTagDefinition
                 {
                     Name = "impact",
                     Description = "Impact of the mod",

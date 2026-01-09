@@ -1,5 +1,6 @@
 ﻿using Packkit.Core;
-using Packkit.Core.Manifest;
+using Packkit.Manifest;
+using Packkit.Tags;
 
 namespace Packkit
 {
@@ -11,8 +12,18 @@ namespace Packkit
         {
             // Utils.SaveBaseManifest();
             // Scanner.ScanFiles();
-            TestTags();
+            // TestTags();
             // TestSort();
+            TestValueTags();
+        }
+
+        static void TestValueTags()
+        {
+            var manifest = PackManifest.LoadFromFile(@"../manifest.toml");
+            var mod = manifest.Mods[
+                "b6b586eb6fdc9ce4b3645cab43642ba87817c5deadef4d87ab884e4fe20ef282"
+            ];
+            Tagger.AddValueTag("priority", 1, mod, manifest);
         }
 
         static void TestSort()

@@ -1,9 +1,7 @@
-namespace Packkit.Core.Manifest;
+namespace Packkit.Tags;
 
-public class Customization
+public static class TagDefinitions
 {
-    public TagRegistry Tags { get; set; } = null!;
-
     // Simple user defined tag, e.g. "technology", "decoration", etc.
     public class SimpleTagDefinition
     {
@@ -16,6 +14,7 @@ public class Customization
     {
         public string Name { get; set; } = null!;
         public string? Description { get; set; } = null;
+        public ValueTagType Type { get; set; }
         public object? DefaultValue { get; set; } = null;
     }
 
@@ -28,10 +27,11 @@ public class Customization
         public object? Default { get; set; } = null;
     }
 
-    public class TagRegistry
+    public enum ValueTagType
     {
-        public List<SimpleTagDefinition> SimpleTags { get; set; } = [];
-        public List<ValueTagDefinition> ValueTags { get; set; } = [];
-        public List<EnumTagDefinition> EnumTags { get; set; } = [];
+        Integer,
+        Float,
+        String,
+        Boolean,
     }
 }

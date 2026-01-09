@@ -1,4 +1,4 @@
-using Packkit.Core.Manifest;
+using Packkit.Manifest;
 
 namespace Packkit.Core;
 
