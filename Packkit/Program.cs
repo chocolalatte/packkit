@@ -12,9 +12,19 @@ namespace Packkit
         {
             // Utils.SaveBaseManifest();
             // Scanner.ScanFiles();
-            // TestTags();
+            TestSimpleTags();
             // TestSort();
             TestValueTags();
+            TestEnumTags();
+        }
+
+        static void TestEnumTags()
+        {
+            var manifest = PackManifest.LoadFromFile(@"../manifest.toml");
+            var mod = manifest.Mods[
+                "b6b586eb6fdc9ce4b3645cab43642ba87817c5deadef4d87ab884e4fe20ef282"
+            ];
+            Tagger.AddEnumTag("importance", "required", mod, manifest);
         }
 
         static void TestValueTags()
@@ -38,7 +48,7 @@ namespace Packkit
             SortedMods.ForEach(m => Console.WriteLine(m.Name));
         }
 
-        static void TestTags()
+        static void TestSimpleTags()
         {
             var manifest = PackManifest.LoadFromFile(@"../manifest.toml");
 
