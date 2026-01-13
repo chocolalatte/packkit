@@ -1,5 +1,6 @@
 ﻿using Packkit.Core;
 using Packkit.Manifest;
+using Packkit.PackManagement;
 using Packkit.Tags;
 
 namespace Packkit
@@ -12,10 +13,12 @@ namespace Packkit
         {
             // Utils.SaveBaseManifest();
             // Scanner.ScanFiles();
-            TestSimpleTags();
+            // TestSimpleTags();
             // TestSort();
-            TestValueTags();
-            TestEnumTags();
+            // TestValueTags();
+            // TestEnumTags();
+
+            PackManager.CreatePack("TestPack");
         }
 
         static void TestEnumTags()

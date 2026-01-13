@@ -14,7 +14,7 @@ public static class Defaults
     public static string BaseManifest => _baseManifest ??= GetBaseManifest();
     public static string SchemaVersion => _schemaVersion ??= GetSchemaVersionFromEmbedded();
 
-    public static string GetBaseManifest()
+    private static string GetBaseManifest()
     {
         var assembly = Assembly.GetExecutingAssembly();
 
@@ -36,7 +36,7 @@ public static class Defaults
         return manifest;
     }
 
-    public static string GetSchemaVersionFromEmbedded()
+    private static string GetSchemaVersionFromEmbedded()
     {
         string tomlText = GetBaseManifest();
         // Parse the base-manifest and try to get the schema_version from the header
