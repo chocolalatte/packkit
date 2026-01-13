@@ -51,7 +51,7 @@ public class PackManifest
         return model;
     }
 
-    public void SaveToFile(string path = "../manifest.toml")
+    public void SaveToFile(string path)
     {
         Header.Touch();
 
