@@ -114,39 +114,42 @@ public static class Tagger
         var enumTagDefinitions = manifest.Customization.Tags.EnumTags;
         var enumTag = enumTagDefinitions.FirstOrDefault(t => t.Name == tag);
 
+        // Check if tag exists in manifest's tag definitions
+        // Return and log error if it doesn't
         if (enumTag == null)
         {
             Console.WriteLine($"[MANIFEST:TAGGER] [ERROR-001] Tag \"{tag}\" not found in manifest");
+            return;
         }
+        // Check if tags options contains value
+        // Return and log error if it doesn't
         else if (!enumTag.Options.Contains(value))
         {
             Console.WriteLine(
                 $"[MANIFEST:TAGGER] [ERROR-002] Tag \"{tag}\" does not contain possible value \"{value}\""
             );
+            return;
         }
         // Run if manifest contains definition for tag and contains value
-        else
+        // Check if tag already has same value
+        if (
+            modEntry.Tags.Enum.TryGetValue(tag, out string? existingValue)
+            && existingValue == value
+        )
         {
-            // Check if tag already has same value
-            if (
-                modEntry.Tags.Enum.TryGetValue(tag, out string? existingValue)
-                && existingValue == value
-            )
-            {
-                Console.WriteLine(
-                    $"[MANIFEST:TAGGER] [WARN] Tag \"{tag}\" already exists in \"{modEntry.Name}\" with value \"{value}\""
-                );
-                return;
-            }
-
-            // Add tag and value to modEntry
-            modEntry.Tags.Enum[tag] = value;
             Console.WriteLine(
-                $"[MANIFEST:TAGGER] [INFO] Added enum tag \"{tag}\" with value of \"{value}\" to \"{modEntry.Name}\""
+                $"[MANIFEST:TAGGER] [WARN] Tag \"{tag}\" already exists in \"{modEntry.Name}\" with value \"{value}\""
             );
-            // For future helper functions
-            if (save)
-                manifest.SaveToFile();
+            return;
         }
+        // Core logic
+
+        modEntry.Tags.Enum[tag] = value;
+        Console.WriteLine(
+            $"[MANIFEST:TAGGER] [INFO] Added enum tag \"{tag}\" with value of \"{value}\" to \"{modEntry.Name}\""
+        );
+        // For future helper functions
+        if (save)
+            manifest.SaveToFile();
     }
 }
