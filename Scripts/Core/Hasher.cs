@@ -1,4 +1,4 @@
-using System.IO.Pipelines;
+using System.IO;
 using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 
@@ -6,11 +6,11 @@ namespace Packkit.Core;
 
 public static class Hasher
 {
-    public static string Hash(string filePath)
+    public static string Hash(Stream stream)
     {
-        using var stream = File.OpenRead(filePath);
         using var sha = SHA256.Create();
         byte[] hashBytes = sha.ComputeHash(stream);
-        return Convert.ToHexStringLower(hashBytes);
+        string hash = hashBytes.ToString();
+        return hash;
     }
 }

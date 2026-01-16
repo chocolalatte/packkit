@@ -1,8 +1,12 @@
+#if false
 using System.Dynamic;
+using System.IO;
 using System.IO.Compression;
 using System.IO.Enumeration;
+using System.Linq;
 using System.Net.Http.Json;
 using System.Net.Mime;
+using Godot;
 using Microsoft.VisualBasic;
 using Packkit.Manifest;
 using Tomlyn;
@@ -51,7 +55,7 @@ public class Scanner
                 {
                     modsScannedCount++;
                     // Log progress
-                    Console.WriteLine(
+                    GD.Print(
                         $"[SCANNER] [PROGRESS] [{scannedFileCount()}/{totalFileCount}] File already in manifest: {fileName}"
                     );
                     continue;
@@ -66,7 +70,7 @@ public class Scanner
 
                     // Log progress
                     modsScannedCount++;
-                    Console.WriteLine(
+                    GD.Print(
                         $"[SCANNER] [PROGRESS] [{scannedFileCount()}/{totalFileCount}] Forge mod scanned: {fileName}"
                     );
                 }
@@ -79,7 +83,7 @@ public class Scanner
 
                     // Log progress
                     modsScannedCount++;
-                    Console.WriteLine(
+                    GD.Print(
                         $"[SCANNER] [PROGRESS] [{scannedFileCount()}/{totalFileCount}] Fabric mod scanned: {fileName}"
                     );
                 }
@@ -88,7 +92,7 @@ public class Scanner
                 {
                     // Log progress
                     failedScanCount++;
-                    Console.WriteLine(
+                    GD.Print(
                         $"[SCANNER] [PROGRESS] [{scannedFileCount()}/{totalFileCount}] failed to scan file: {fileName}, unsupported mod loader"
                     );
                 }
@@ -97,17 +101,18 @@ public class Scanner
             {
                 // Log progress
                 failedScanCount++;
-                Console.WriteLine(
+                GD.Print(
                     $"[SCANNER] [PROGRESS] [{scannedFileCount()}/{totalFileCount}] failed to scan file: {fileName}"
                 );
             }
         }
 
         // Summary of the scan
-        Console.WriteLine(
+        GD.Print(
             $"[SCANNER] [INFO] {modsScannedCount} mods scanned out of {totalFileCount} files in folder: {failedScanCount} failed scan(s)"
         );
 
         manifest.SaveToFile(manifestPath);
     }
 }
+#endif

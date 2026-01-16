@@ -1,3 +1,5 @@
+using System;
+
 namespace Packkit.Manifest;
 
 public class Header

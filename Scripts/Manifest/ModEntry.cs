@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
-using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Packkit.Manifest;
 
-public partial class ModEntry : ObservableObject
+public partial class ModEntry
 {
     public string? ModId { get; set; } = null;
     public string? Name { get; set; } = null;

@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Reflection;
 using Tomlyn;
 using Tomlyn.Model;
@@ -6,7 +8,7 @@ namespace Packkit.Manifest;
 
 public static class Defaults
 {
-    public const string BaseManifestResourceName = "Packkit.Manifest.base-manifest.toml";
+    public const string BaseManifestPath = "Scripts/Manifest/base-manifest.toml";
 
     private static string? _baseManifest = null;
     private static string? _schemaVersion = null;
@@ -19,9 +21,9 @@ public static class Defaults
         var assembly = Assembly.GetExecutingAssembly();
 
         using Stream stream =
-            assembly.GetManifestResourceStream(BaseManifestResourceName)
+            File.OpenRead(BaseManifestPath)
             ?? throw new FileNotFoundException(
-                $"[MANIFEST:DEFAULTS] [ERROR-001] Embedded resource '{BaseManifestResourceName}' not found."
+                $"[MANIFEST:DEFAULTS] [ERROR-001] Embedded resource '{BaseManifestPath}' not found."
             );
 
         using StreamReader reader = new(stream);
@@ -51,7 +53,7 @@ public static class Defaults
 
         return "unknown";
         throw new Exception(
-            $"[MANIFEST:DEFAULTS] [ERROR-002] schema_version not found in embedded manifest: {BaseManifestResourceName}"
+            $"[MANIFEST:DEFAULTS] [ERROR-002] schema_version not found in embedded manifest: {BaseManifestPath}"
         );
     }
 }

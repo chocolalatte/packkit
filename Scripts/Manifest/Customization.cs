@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Packkit.Tags;
 
 namespace Packkit.Manifest;

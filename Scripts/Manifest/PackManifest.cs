@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.IO;
+using Godot;
 using Tomlyn;
 using Tomlyn.Model;
 
@@ -54,7 +57,7 @@ public class PackManifest
         }
         else
         {
-            Console.WriteLine(
+            GD.Print(
                 $"[MANIFEST] [WARN] Manifest not found: {path}, defaulting to base-manifest.toml"
             );
 
