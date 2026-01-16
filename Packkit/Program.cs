@@ -20,7 +20,16 @@ namespace Packkit
             // TestValueTags();
             // TestEnumTags();
 
-            PackManager.CreatePack("TestPack", "TestAuthor");
+            try
+            {
+                PackManager.CreatePack("TestPack", "TestAuthor");
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+                return;
+            }
+
             string? manifestPath = PackManager.GetPackManifestPath("TestPack");
 
             if (manifestPath != null)

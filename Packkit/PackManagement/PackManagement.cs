@@ -57,10 +57,9 @@ namespace Packkit.PackManagement
 
             if (Directory.Exists(packPath))
             {
-                Console.WriteLine(
+                throw new Exception(
                     $"[PACKMANAGEMENT:PACKMANAGER] [ERROR-002] Pack \"{packName}\" already exists"
                 );
-                return;
             }
 
             Directory.CreateDirectory(packPath);
