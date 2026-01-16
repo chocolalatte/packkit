@@ -28,7 +28,22 @@ public class PackManifest
         }
     }
 
-    public static PackManifest LoadFromFile(string path)
+    public static PackManifest LoadExisting(string path)
+    {
+        if (!File.Exists(path))
+        {
+            throw new FileNotFoundException(
+                $"[MANIFEST] [ERROR-001] No existing manifest found",
+                path
+            );
+        }
+
+        var model = Toml.ToModel<PackManifest>(File.ReadAllText(path));
+        model.Initialize();
+        return model;
+    }
+
+    public static PackManifest LoadOrCreate(string path)
     {
         PackManifest model;
 

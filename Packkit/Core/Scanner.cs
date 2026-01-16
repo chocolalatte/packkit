@@ -15,9 +15,10 @@ public class Scanner
     // Some files may have both a mods.toml and a fabric.mod.json
     // TODO: Parse both files and determine the actual loader
     // TODO: Add support for other loaders
-    public static void ScanFiles(string modsDirectoryPath = @"../mods")
+    // TODO: Clean up code, extract functions to make more readable
+    public static void ScanFiles(string manifestPath, string modsDirectoryPath = @"../mods")
     {
-        PackManifest manifest = PackManifest.LoadFromFile(@"../manifest.toml");
+        PackManifest manifest = PackManifest.LoadOrCreate(manifestPath);
         var modsDirectory = Directory.EnumerateFiles(modsDirectoryPath);
 
         // Variables for keeping track of progress
@@ -95,6 +96,6 @@ public class Scanner
             $"[SCANNER] [INFO] {modsScannedCount} mods scanned out of {totalFileCount} files in folder: {failedScanCount} failed scan(s)"
         );
 
-        manifest.SaveToFile();
+        manifest.SaveToFile(manifestPath);
     }
 }

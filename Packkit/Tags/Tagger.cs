@@ -1,3 +1,4 @@
+#if false
 using System.Xml.Linq;
 using Packkit.Manifest;
 
@@ -153,3 +154,4 @@ public static class Tagger
             manifest.SaveToFile();
     }
 }
+#endif

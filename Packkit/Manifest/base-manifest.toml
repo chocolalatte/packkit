@@ -1,5 +1,8 @@
 [header]
+id = "00000000-0000-0000-0000-000000000000"
+slug = "test_user.pakkit_base_manifest"
 name = "Pakkit Base Manifest"
+author = "Test User"
 schema_version = "2.5.0"
 pack_version = "1.0.0"
 created_at = "2026-01-06T08:24:09Z"
