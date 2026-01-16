@@ -1,9 +1,3 @@
-bin/
-obj/
-out/
-.vscode/
-packkit.sln
-
-/mods
-manifest.toml
-manifest-old.toml
+# Godot 4+ specific ignores
+.godot/
+/android/
