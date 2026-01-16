@@ -36,11 +36,16 @@ namespace Packkit.PackManagement
 
         public static string? GetPackManifestPath(string name)
         {
-            // Console.WriteLine(
-            //     $"[PACKMANAGEMENT:PACKMANAGER] [ERROR-001] Pack \"{name}\" not found"
-            // );
-
             string manifestPath = Path.Combine(modpacksFolder, name, "manifest.toml");
+
+            if (!File.Exists(manifestPath))
+            {
+                throw new FileNotFoundException(
+                    $"[PACKMANAGEMENT:PACKMANAGER] [ERROR-001] PackManifest for pack \"{name}\" not found",
+                    manifestPath
+                );
+            }
+
             return manifestPath;
         }
 
@@ -49,6 +54,15 @@ namespace Packkit.PackManagement
         {
             Console.WriteLine($"[PACKMANAGEMENT:PACKMANAGER] [INFO] Creating pack \"{packName}\"");
             string packPath = Path.Combine(modpacksFolder, packName);
+
+            if (Directory.Exists(packPath))
+            {
+                Console.WriteLine(
+                    $"[PACKMANAGEMENT:PACKMANAGER] [ERROR-002] Pack \"{packName}\" already exists"
+                );
+                return;
+            }
+
             Directory.CreateDirectory(packPath);
 
             PackManifest manifest = Toml.ToModel<PackManifest>(Defaults.BaseManifest);
