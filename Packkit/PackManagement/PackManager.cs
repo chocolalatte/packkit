@@ -49,7 +49,6 @@ namespace Packkit.PackManagement
             return manifestPath;
         }
 
-        // TODO: Check if it's overwritting an existing pack
         public static void CreatePack(string packName, string packAuthor)
         {
             Console.WriteLine($"[PACKMANAGEMENT:PACKMANAGER] [INFO] Creating pack \"{packName}\"");
