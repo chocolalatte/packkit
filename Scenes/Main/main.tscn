@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b2gfyftnk1sm3" path="res://Scenes/Main/Main.cs" id="1_1r6ip"]
 
-[node name="Main" type="Control"]
+[node name="Main" type="Control" node_paths=PackedStringArray("textEdit")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,20 +10,30 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1r6ip")
+textEdit = NodePath("VBoxContainer/TextEdit")
 
-[node name="Button" type="Button" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -68.0
-offset_top = -15.5
-offset_right = 68.0
-offset_bottom = 15.5
+offset_left = -50.0
+offset_top = -21.5
+offset_right = 50.0
+offset_bottom = 21.5
 grow_horizontal = 2
 grow_vertical = 2
-text = "Create Test Pack"
 
-[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[node name="TextEdit" type="TextEdit" parent="VBoxContainer"]
+custom_minimum_size = Vector2(256, 48)
+layout_mode = 2
+placeholder_text = "Enter Pack Name"
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Create Pack"
+
+[connection signal="text_changed" from="VBoxContainer/TextEdit" to="." method="_on_text_edit_text_changed"]
+[connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_button_pressed"]
