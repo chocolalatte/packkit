@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using Godot;
 using Packkit.Manifest;
 using Tomlyn;
 
@@ -13,7 +14,7 @@ namespace Packkit.PackManagement
         public static PackManifest? ActivePack { get; private set; }
         public static Dictionary<Guid, PackManifest> Packs { get; private set; } = [];
         private static readonly string packsFolder = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData),
             "Pakkit",
             "packs"
         );
@@ -134,7 +135,7 @@ namespace Packkit.PackManagement
             Packs.Add(guid, manifest);
             manifest.SaveToFile(packPath + "/manifest.toml");
 
-            Console.WriteLine(
+            GD.Print(
                 $"[PACKMANAGEMENT:PACKMANAGER] [INFO] Pack \"{packName}\" created successfully with slug {packSlug}"
             );
         }

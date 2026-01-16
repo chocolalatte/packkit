@@ -1,39 +1,43 @@
-[gd_scene load_steps=2 format=3 uid="uid://s2bj0ycjqavg"]
+[gd_scene load_steps=4 format=3 uid="uid://s2bj0ycjqavg"]
 
 [ext_resource type="Script" uid="uid://b2gfyftnk1sm3" path="res://Scenes/Main/Main.cs" id="1_1r6ip"]
+[ext_resource type="Theme" uid="uid://kwg7qejbfrjl" path="res://Themes/Main.tres" id="1_lixft"]
+[ext_resource type="PackedScene" uid="uid://ce0qlmg4jvgnb" path="res://Scenes/PackList/List/pack_list.tscn" id="3_qw60k"]
 
-[node name="Main" type="Control" node_paths=PackedStringArray("textEdit")]
+[node name="Main" type="Control" node_paths=PackedStringArray("PackList")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_lixft")
 script = ExtResource("1_1r6ip")
-textEdit = NodePath("VBoxContainer/TextEdit")
+PackList = NodePath("VBoxContainer/MarginContainer/PackList")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -50.0
-offset_top = -21.5
-offset_right = 50.0
-offset_bottom = 21.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextEdit" type="TextEdit" parent="VBoxContainer"]
-custom_minimum_size = Vector2(256, 48)
+[node name="TabBar" type="TabBar" parent="VBoxContainer"]
 layout_mode = 2
-placeholder_text = "Enter Pack Name"
+size_flags_horizontal = 4
+current_tab = 0
+clip_tabs = false
+tab_count = 2
+tab_0/title = "Home"
+tab_1/title = "Packs"
 
-[node name="Button" type="Button" parent="VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
-text = "Create Pack"
+size_flags_vertical = 3
 
-[connection signal="text_changed" from="VBoxContainer/TextEdit" to="." method="_on_text_edit_text_changed"]
-[connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_button_pressed"]
+[node name="PackList" parent="VBoxContainer/MarginContainer" instance=ExtResource("3_qw60k")]
+visible = false
+layout_mode = 2
+
+[connection signal="tab_changed" from="VBoxContainer/TabBar" to="." method="_on_tab_bar_tab_changed"]

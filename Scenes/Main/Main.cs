@@ -7,7 +7,7 @@ namespace Packkit.Ui;
 public partial class Main : Control
 {
     [Export]
-    public TextEdit textEdit;
+    public PackList PackList;
     private string packName;
 
     private void _on_button_pressed()
@@ -20,8 +20,16 @@ public partial class Main : Control
         PackManager.CreatePack(packName, "TestAuthor");
     }
 
-    private void _on_text_edit_text_changed()
+    private void _on_tab_bar_tab_changed(int index)
     {
-        packName = textEdit.Text;
+        switch (index)
+        {
+            case 0:
+                PackList.Visible = false;
+                break;
+            case 1:
+                PackList.Visible = true;
+                break;
+        }
     }
 }
