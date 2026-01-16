@@ -16,8 +16,11 @@ public class Scanner
     // TODO: Parse both files and determine the actual loader
     // TODO: Add support for other loaders
     // TODO: Clean up code, extract functions to make more readable
-    public static void ScanFiles(string manifestPath, string modsDirectoryPath = @"../mods")
+    public static void ScanFiles(string packPath)
     {
+        string manifestPath = $"{packPath}/manifest.toml";
+        string modsDirectoryPath = $"{packPath}/mods";
+
         PackManifest manifest = PackManifest.LoadOrCreate(manifestPath);
         var modsDirectory = Directory.EnumerateFiles(modsDirectoryPath);
 
@@ -49,7 +52,7 @@ public class Scanner
                     modsScannedCount++;
                     // Log progress
                     Console.WriteLine(
-                        $"[{scannedFileCount()}/{totalFileCount}] [SCANNER] [INFO] File already in manifest: {fileName}"
+                        $"[SCANNER] [PROGRESS] [{scannedFileCount()}/{totalFileCount}] File already in manifest: {fileName}"
                     );
                     continue;
                 }
@@ -64,7 +67,7 @@ public class Scanner
                     // Log progress
                     modsScannedCount++;
                     Console.WriteLine(
-                        $"[{scannedFileCount()}/{totalFileCount}] [SCANNER] [INFO] Forge mod scanned: {fileName}"
+                        $"[SCANNER] [PROGRESS] [{scannedFileCount()}/{totalFileCount}] Forge mod scanned: {fileName}"
                     );
                 }
                 // Scan fabric mod json file
@@ -77,7 +80,16 @@ public class Scanner
                     // Log progress
                     modsScannedCount++;
                     Console.WriteLine(
-                        $"[{scannedFileCount()}/{totalFileCount}] [SCANNER] [INFO] Fabric mod scanned: {fileName}"
+                        $"[SCANNER] [PROGRESS] [{scannedFileCount()}/{totalFileCount}] Fabric mod scanned: {fileName}"
+                    );
+                }
+                // Catch other mod loaders
+                else
+                {
+                    // Log progress
+                    failedScanCount++;
+                    Console.WriteLine(
+                        $"[SCANNER] [PROGRESS] [{scannedFileCount()}/{totalFileCount}] failed to scan file: {fileName}, unsupported mod loader"
                     );
                 }
             }
@@ -86,7 +98,7 @@ public class Scanner
                 // Log progress
                 failedScanCount++;
                 Console.WriteLine(
-                    $"[{scannedFileCount()}/{totalFileCount}] [SCANNER] [ERROR-001] failed to scan file: {fileName}"
+                    $"[SCANNER] [PROGRESS] [{scannedFileCount()}/{totalFileCount}] failed to scan file: {fileName}"
                 );
             }
         }

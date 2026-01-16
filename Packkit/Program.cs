@@ -24,21 +24,28 @@ namespace Packkit
             {
                 PackManager.CreatePack("TestPack", "TestAuthor");
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                Console.WriteLine(exception.Message);
-                return;
+                Console.WriteLine(ex.Message);
             }
 
-            string? manifestPath = PackManager.GetPackManifestPath("TestPack");
-
-            if (manifestPath != null)
+            try
             {
-                Scanner.ScanFiles(manifestPath);
+                PackManager.SetActivePack(Guid.Parse("3674fd63-88c6-46f0-86c5-b06ba5fa4f61"));
+
+                string packPath = PackManager.GetPackFolderPath();
+                Scanner.ScanFiles(packPath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
 
-        static void InitilizeAll() { }
+        static void InitilizeAll()
+        {
+            PackManager.Initialize();
+        }
 
         // static void TestEnumTags()
         // {
