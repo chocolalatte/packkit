@@ -11,17 +11,6 @@ public partial class ActivePack : VBoxContainer
     [Export]
     public Pack pack;
 
-    public override void _Ready()
-    {
-        PackManager.PackManagerInstance.ActivePackChanged += OnActivePackChanged;
-    }
-
-    public void OnActivePackChanged()
-    {
-        pack.PackId = PackManager.ActivePack.Item1;
-        pack.PackNameLabel.Text = PackManager.ActivePack.Item2.Header.Name;
-    }
-
     private void _on_delete_button_pressed() => pack.Delete();
 
     private void _on_open_folder_button_pressed() => pack.OpenPackFolder();

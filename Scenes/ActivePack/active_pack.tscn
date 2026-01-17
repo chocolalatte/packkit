@@ -6,8 +6,19 @@
 [ext_resource type="Theme" uid="uid://dueacwmq478rt" path="res://Themes/button_container.tres" id="2_2x40j"]
 
 [node name="ActivePack" type="VBoxContainer" node_paths=PackedStringArray("pack")]
-offset_right = 166.0
-offset_bottom = 225.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -83.0
+offset_top = -114.5
+offset_right = 83.0
+offset_bottom = 114.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 script = ExtResource("1_2x40j")
 pack = NodePath("Pack")
 

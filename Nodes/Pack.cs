@@ -15,6 +15,11 @@ public partial class Pack : Control
     public Label PackNameLabel;
     public Guid PackId;
 
+    public override void _Ready()
+    {
+        PackManager.PackManagerInstance.PackDeleted += _on_pack_deleted;
+    }
+
     public void Initialize()
     {
         PackNameLabel.Text = PackManager.Packs[PackId].Header.Name;
@@ -22,8 +27,19 @@ public partial class Pack : Control
 
     public void Delete()
     {
-        PackManager.DeletePack(PackId);
-        GetParent().QueueFree();
+        PackManager.PackManagerInstance.DeletePack(PackId);
+    }
+
+    private void _on_pack_deleted(string packIdString)
+    {
+        if (PackId.ToString() == packIdString)
+        {
+            GetParent().QueueFree();
+        }
+        else
+        {
+            GD.Print($"Not deleting pack {PackId}");
+        }
     }
 
     public void OpenPackFolder()

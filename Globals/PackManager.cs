@@ -14,7 +14,11 @@ namespace Packkit.Globals;
 public partial class PackManager : Node
 {
     [Signal]
+    public delegate void PackDeletedEventHandler(string packIdString);
+
+    [Signal]
     public delegate void ActivePackChangedEventHandler();
+
     public static PackManager PackManagerInstance { get; private set; }
     public static Tuple<Guid, PackManifest> ActivePack { get; private set; }
     public static Dictionary<Guid, PackManifest> Packs { get; private set; } = [];
@@ -153,7 +157,7 @@ public partial class PackManager : Node
         return guid;
     }
 
-    public static void DeletePack(Guid packId)
+    public void DeletePack(Guid packId)
     {
         GD.Print(
             $"[PACKMANAGEMENT:PACKMANAGER] [INFO] Deleting pack \"{Packs[packId].Header.Name}\""
@@ -162,5 +166,7 @@ public partial class PackManager : Node
         string packPath = GetPackFolderPath(packId);
         Directory.Delete(packPath, true);
         Packs.Remove(packId);
+
+        EmitSignal(nameof(PackDeleted), packId.ToString());
     }
 }
