@@ -42,4 +42,5 @@ text = "Open Folder"
 layout_mode = 2
 text = "Delete"
 
+[connection signal="pressed" from="VBoxContainer/GridContainer/OpenFolderButton" to="." method="_on_open_folder_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/GridContainer/DeleteButton" to="." method="_on_delete_button_pressed"]
