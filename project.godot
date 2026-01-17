@@ -18,7 +18,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Initializer="*res://Globals/Initializer.cs"
+PackManager="*res://Globals/PackManager.cs"
 
 [dotnet]
 

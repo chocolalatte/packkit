@@ -1,23 +1,20 @@
-[gd_scene load_steps=6 format=3 uid="uid://de2341w6ersqy"]
+[gd_scene load_steps=5 format=3 uid="uid://djcpb8pq28xnx"]
 
-[ext_resource type="Script" uid="uid://c26k5m3xix0mi" path="res://Scenes/PackList/Entry/PackListEntry.cs" id="1_w7utf"]
-[ext_resource type="Texture2D" uid="uid://d2x45gcbd5cde" path="res://icon.svg" id="2_gcm1x"]
-[ext_resource type="Theme" uid="uid://dueacwmq478rt" path="res://Themes/button_container.tres" id="3_emuxy"]
-[ext_resource type="Script" uid="uid://b3i8lm6fhx178" path="res://Nodes/Pack.cs" id="4_uqrix"]
+[ext_resource type="Script" uid="uid://6y1re0x0sed0" path="res://Scenes/ActivePack/ActivePack.cs" id="1_2x40j"]
+[ext_resource type="Script" uid="uid://b3i8lm6fhx178" path="res://Nodes/Pack.cs" id="1_jhw51"]
+[ext_resource type="Texture2D" uid="uid://d2x45gcbd5cde" path="res://icon.svg" id="1_v0dpi"]
+[ext_resource type="Theme" uid="uid://dueacwmq478rt" path="res://Themes/button_container.tres" id="2_2x40j"]
 
-[sub_resource type="Theme" id="Theme_gcm1x"]
-HBoxContainer/constants/separation = 12
-
-[node name="PackListEntry" type="HBoxContainer" node_paths=PackedStringArray("pack")]
-offset_right = 306.0
-offset_bottom = 128.0
-theme = SubResource("Theme_gcm1x")
-script = ExtResource("1_w7utf")
+[node name="ActivePack" type="VBoxContainer" node_paths=PackedStringArray("pack")]
+offset_right = 166.0
+offset_bottom = 225.0
+script = ExtResource("1_2x40j")
 pack = NodePath("Pack")
 
 [node name="Icon" type="TextureRect" parent="."]
 layout_mode = 2
-texture = ExtResource("2_gcm1x")
+texture = ExtResource("1_v0dpi")
+stretch_mode = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -33,7 +30,7 @@ vertical_alignment = 1
 
 [node name="MainButtonContainer" type="VBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("3_emuxy")
+theme = ExtResource("2_2x40j")
 
 [node name="TopButtonContainer" type="HBoxContainer" parent="VBoxContainer/MainButtonContainer"]
 layout_mode = 2
@@ -63,17 +60,12 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "Scan"
 
-[node name="SetActiveButton" type="Button" parent="VBoxContainer/MainButtonContainer/BottomButtonContainer"]
-layout_mode = 2
-text = "Set Active"
-
 [node name="Pack" type="Control" parent="." node_paths=PackedStringArray("PackNameLabel")]
 layout_mode = 2
-script = ExtResource("4_uqrix")
+script = ExtResource("1_jhw51")
 PackNameLabel = NodePath("../VBoxContainer/PackNameLabel")
 metadata/_custom_type_script = "uid://b3i8lm6fhx178"
 
 [connection signal="pressed" from="VBoxContainer/MainButtonContainer/TopButtonContainer/OpenFolderButton" to="." method="_on_open_folder_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/MainButtonContainer/TopButtonContainer/DeleteButton" to="." method="_on_delete_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/MainButtonContainer/BottomButtonContainer/ScanButton" to="." method="_on_scan_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/MainButtonContainer/BottomButtonContainer/SetActiveButton" to="." method="_on_set_active_button_pressed"]

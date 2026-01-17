@@ -1,6 +1,6 @@
 using System;
 using Godot;
-using Packkit.PackManagement;
+using Packkit.Globals;
 
 namespace Packkit.Ui;
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Godot;
@@ -90,5 +91,10 @@ public class PackManifest
         string formattedToml = string.Join("\n", formattedLines);
 
         File.WriteAllText(path, formattedToml);
+    }
+
+    public static implicit operator Tuple<object, object>(PackManifest v)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using Godot;
-using Packkit.PackManagement;
+using Packkit.Globals;
 
 namespace Packkit.Ui;
 
@@ -23,7 +23,6 @@ public partial class PackList : Control
 
     public override void _Ready()
     {
-        PackManager.Initialize();
         foreach (var pack in PackManager.Packs)
         {
             AddEntry(pack.Key);
@@ -34,8 +33,8 @@ public partial class PackList : Control
     {
         PackListEntry entry = (PackListEntry)PackListEntryScene.Instantiate();
 
-        entry.PackId = packId;
-        entry.Initialize();
+        entry.pack.PackId = packId;
+        entry.pack.Initialize();
 
         PackListEntryContainer.AddChild(entry);
     }

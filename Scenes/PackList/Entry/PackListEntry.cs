@@ -1,35 +1,22 @@
 using System;
 using Godot;
 using Packkit.Core;
+using Packkit.Globals;
 using Packkit.Manifest;
-using Packkit.PackManagement;
+using Packkit.Ui.Nodes;
 
 namespace Packkit.Ui;
 
 public partial class PackListEntry : HBoxContainer
 {
-    [Export]
-    public Label PackNameLabel;
-    public Guid PackId;
+	[Export]
+	public Pack pack;
 
-    public void Initialize()
-    {
-        PackNameLabel.Text = PackManager.Packs[PackId].Header.Name;
-    }
+	private void _on_delete_button_pressed() => pack.Delete();
 
-    private void _on_delete_button_pressed()
-    {
-        PackManager.DeletePack(PackId);
-        QueueFree();
-    }
+	private void _on_open_folder_button_pressed() => pack.OpenPackFolder();
 
-    private void _on_open_folder_button_pressed()
-    {
-        OS.ShellOpen(PackManager.GetPackFolderPath(PackId));
-    }
+	private void _on_scan_button_pressed() => pack.Scan();
 
-    private void _on_scan_button_pressed()
-    {
-        Scanner.ScanFiles(PackManager.GetPackFolderPath(PackId));
-    }
+	private void _on_set_active_button_pressed() => pack.SetActive();
 }

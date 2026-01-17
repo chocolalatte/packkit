@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://s2bj0ycjqavg"]
+[gd_scene load_steps=5 format=3 uid="uid://s2bj0ycjqavg"]
 
 [ext_resource type="Script" uid="uid://b2gfyftnk1sm3" path="res://Scenes/Main/Main.cs" id="1_1r6ip"]
 [ext_resource type="Theme" uid="uid://kwg7qejbfrjl" path="res://Themes/Main.tres" id="1_lixft"]
+[ext_resource type="PackedScene" uid="uid://djcpb8pq28xnx" path="res://Scenes/ActivePack/active_pack.tscn" id="3_5yls4"]
 [ext_resource type="PackedScene" uid="uid://ce0qlmg4jvgnb" path="res://Scenes/PackList/List/pack_list.tscn" id="3_qw60k"]
 
 [node name="Main" type="Control" node_paths=PackedStringArray("PackList")]
@@ -24,9 +25,14 @@ grow_horizontal = 2
 grow_vertical = 2
 current_tab = 0
 
-[node name="Home" type="VBoxContainer" parent="TabContainer"]
+[node name="Home" type="MarginContainer" parent="TabContainer"]
 layout_mode = 2
 metadata/_tab_index = 0
+
+[node name="ActivePack" parent="TabContainer/Home" instance=ExtResource("3_5yls4")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="PackList" parent="TabContainer" instance=ExtResource("3_qw60k")]
 visible = false
