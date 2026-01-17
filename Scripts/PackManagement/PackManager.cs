@@ -74,10 +74,10 @@ namespace Packkit.PackManagement
             );
         }
 
-        public static string GetPackFolderPath(string? name = null)
+        public static string GetPackFolderPath(Guid? guid)
         {
             // Use active pack if no name is provided
-            if (name == null)
+            if (guid == null)
             {
                 // Throw error if no active pack is selected
                 if (ActivePack == null)
@@ -87,16 +87,17 @@ namespace Packkit.PackManagement
                     );
                 }
 
-                name = ActivePack.Header.Name;
+                guid = Guid.Parse(ActivePack.Header.Id);
             }
 
+            string name = Packs[guid.Value].Header.Name;
             string packPath = Path.Combine(packsFolder, name!);
 
             // Check if the pack exists
             if (!Directory.Exists(packPath))
             {
                 throw new DirectoryNotFoundException(
-                    $"[PACKMANAGEMENT:PACKMANAGER] [ERROR-001] PackManifest for pack \"{name}\" not found at path {packPath}"
+                    $"[PACKMANAGEMENT:PACKMANAGER] [ERROR-001] PackManifest for pack \"{name}\" with guid \"{guid}\" not found at path {packPath}"
                 );
             }
 
@@ -140,6 +141,17 @@ namespace Packkit.PackManagement
             );
 
             return guid;
+        }
+
+        public static void DeletePack(Guid packId)
+        {
+            GD.Print(
+                $"[PACKMANAGEMENT:PACKMANAGER] [INFO] Deleting pack \"{Packs[packId].Header.Name}\""
+            );
+
+            string packPath = GetPackFolderPath(packId);
+            Directory.Delete(packPath, true);
+            Packs.Remove(packId);
         }
     }
 }
