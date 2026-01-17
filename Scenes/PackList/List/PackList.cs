@@ -24,18 +24,20 @@ public partial class PackList : Control
     public override void _Ready()
     {
         PackManager.Initialize();
-        foreach (var pack in PackManager.Packs.Values)
+        foreach (var pack in PackManager.Packs)
         {
-            AddEntry(pack.Header.Name);
+            AddEntry(pack.Key);
         }
     }
 
-    private void AddEntry(string packName)
+    private void AddEntry(Guid packId)
     {
         PackListEntry entry = (PackListEntry)PackListEntryScene.Instantiate();
-        PackListEntryContainer.AddChild(entry);
 
-        entry.PackName.Text = packName;
+        entry.PackId = packId;
+        entry.Initialize();
+
+        PackListEntryContainer.AddChild(entry);
     }
 
     private void _on_create_pack_menu_button_pressed()
@@ -55,8 +57,8 @@ public partial class PackList : Control
 
     private void _on_create_pack_button_pressed()
     {
-        PackManager.CreatePack(NewPackName, "TestAuthor");
+        Guid packId = PackManager.CreatePack(NewPackName, "TestAuthor");
 
-        AddEntry(NewPackName);
+        AddEntry(packId);
     }
 }

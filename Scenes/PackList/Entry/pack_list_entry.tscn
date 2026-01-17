@@ -4,33 +4,50 @@
 [ext_resource type="Texture2D" uid="uid://d2x45gcbd5cde" path="res://icon.svg" id="2_gcm1x"]
 
 [sub_resource type="Theme" id="Theme_oxueo"]
-Label/font_sizes/font_size = 16
+Label/font_sizes/font_size = 24
 
-[node name="PackListEntry" type="Control" node_paths=PackedStringArray("PackName")]
+[node name="PackListEntry" type="Control" node_paths=PackedStringArray("PackNameLabel")]
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_top = 1.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 0
 theme = SubResource("Theme_oxueo")
 script = ExtResource("1_w7utf")
-PackName = NodePath("HBoxContainer/Label")
+PackNameLabel = NodePath("HSplitContainer/VBoxContainer/PackNameLabel")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_mode = 1
-offset_right = 128.0
-offset_bottom = 64.0
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 0
+offset_bottom = 40.0
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
-custom_minimum_size = Vector2(64, 64)
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer"]
 layout_mode = 2
 texture = ExtResource("2_gcm1x")
-expand_mode = 1
 
-[node name="Label" type="Label" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer"]
 layout_mode = 2
-text = "Temp"
+
+[node name="PackNameLabel" type="Label" parent="HSplitContainer/VBoxContainer"]
+layout_mode = 2
+text = "PackName"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="HSplitContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="OpenFolderButton" type="Button" parent="HSplitContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Open Folder"
+
+[node name="DeleteButton" type="Button" parent="HSplitContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Delete"

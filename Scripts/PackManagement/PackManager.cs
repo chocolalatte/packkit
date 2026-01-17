@@ -103,7 +103,7 @@ namespace Packkit.PackManagement
             return packPath;
         }
 
-        public static void CreatePack(string packName, string packAuthor)
+        public static Guid CreatePack(string packName, string packAuthor)
         {
             Console.WriteLine($"[PACKMANAGEMENT:PACKMANAGER] [INFO] Creating pack \"{packName}\"");
             string packPath = Path.Combine(packsFolder, packName);
@@ -138,6 +138,8 @@ namespace Packkit.PackManagement
             GD.Print(
                 $"[PACKMANAGEMENT:PACKMANAGER] [INFO] Pack \"{packName}\" created successfully with slug {packSlug}"
             );
+
+            return guid;
         }
     }
 }
