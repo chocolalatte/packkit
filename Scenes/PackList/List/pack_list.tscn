@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://ce0qlmg4jvgnb"]
+[gd_scene load_steps=5 format=3 uid="uid://ce0qlmg4jvgnb"]
 
 [ext_resource type="Script" uid="uid://cyeqdtv5qab28" path="res://Scenes/PackList/List/PackList.cs" id="1_gi38b"]
 [ext_resource type="PackedScene" uid="uid://de2341w6ersqy" path="res://Scenes/PackList/Entry/pack_list_entry.tscn" id="2_ib3ek"]
 [ext_resource type="Theme" uid="uid://kwg7qejbfrjl" path="res://Themes/Main.tres" id="3_ib3ek"]
+
+[sub_resource type="Theme" id="Theme_ib3ek"]
+VBoxContainer/constants/separation = 12
 
 [node name="PackList" type="Control" node_paths=PackedStringArray("PackListEntryContainer", "NewPackMenu", "PackNameTextEdit")]
 layout_mode = 3
@@ -11,7 +14,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("3_ib3ek")
+theme = SubResource("Theme_ib3ek")
 script = ExtResource("1_gi38b")
 PackListEntryContainer = NodePath("ScrollContainer/PackListEntryContainer")
 NewPackMenu = NodePath("NewPackMenu")
@@ -28,8 +31,9 @@ anchor_bottom = 0.9
 grow_vertical = 2
 
 [node name="PackListEntryContainer" type="VBoxContainer" parent="ScrollContainer"]
+clip_contents = true
 layout_mode = 2
-theme_override_constants/separation = 128
+theme_override_constants/separation = 12
 
 [node name="CreatePackMenuButton" type="Button" parent="."]
 layout_mode = 1

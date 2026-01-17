@@ -5,7 +5,7 @@ using Packkit.PackManagement;
 
 namespace Packkit.Ui;
 
-public partial class PackListEntry : Control
+public partial class PackListEntry : HBoxContainer
 {
     [Export]
     public Label PackNameLabel;
