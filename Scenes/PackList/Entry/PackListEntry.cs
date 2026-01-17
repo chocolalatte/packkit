@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using Packkit.Core;
 using Packkit.Manifest;
 using Packkit.PackManagement;
 
@@ -25,5 +26,10 @@ public partial class PackListEntry : HBoxContainer
     private void _on_open_folder_button_pressed()
     {
         OS.ShellOpen(PackManager.GetPackFolderPath(PackId));
+    }
+
+    private void _on_scan_button_pressed()
+    {
+        Scanner.ScanFiles(PackManager.GetPackFolderPath(PackId));
     }
 }

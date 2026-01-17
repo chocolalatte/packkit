@@ -1,4 +1,3 @@
-#if false
 using System.Dynamic;
 using System.IO;
 using System.IO.Compression;
@@ -44,7 +43,7 @@ public class Scanner
         {
             string fileHash = Hasher.Hash(file);
             string fileName = Path.GetFileName(file);
-            ModEntry? modEntry = null;
+            ModEntry modEntry = null;
 
             try
             {
@@ -115,4 +114,3 @@ public class Scanner
         manifest.SaveToFile(manifestPath);
     }
 }
-#endif

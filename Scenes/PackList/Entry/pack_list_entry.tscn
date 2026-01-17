@@ -33,14 +33,26 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+columns = 2
 
 [node name="OpenFolderButton" type="Button" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 text = "Open Folder"
 
 [node name="DeleteButton" type="Button" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 text = "Delete"
+
+[node name="ScanButton" type="Button" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Scan"
 
 [connection signal="pressed" from="VBoxContainer/GridContainer/OpenFolderButton" to="." method="_on_open_folder_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/GridContainer/DeleteButton" to="." method="_on_delete_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/GridContainer/ScanButton" to="." method="_on_scan_button_pressed"]
