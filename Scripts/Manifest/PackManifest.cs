@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using Godot;
 using Tomlyn;
-using Tomlyn.Model;
 
 namespace Packkit.Manifest;
 
@@ -12,25 +11,6 @@ public class PackManifest
     public Header Header { get; set; } = new Header();
     public Customization Customization { get; set; } = new Customization();
     public Dictionary<string, ModEntry> Mods { get; set; } = [];
-
-    // Check if Initialize is still needed, error was because a HashSet was used, which is unsupported by toml
-    public void Initialize()
-    {
-        Mods ??= new Dictionary<string, ModEntry>();
-
-        foreach (var mod in Mods.Values)
-        {
-            mod.Tags ??= new ModTags();
-
-            mod.Tags.Simple ??= new List<string>();
-            mod.Tags.Value ??= new Dictionary<string, object>();
-            mod.Tags.Enum ??= new Dictionary<string, string>();
-
-            mod.Notes ??= new List<string>();
-            mod.Requires ??= new List<string>();
-            mod.Recommends ??= new List<string>();
-        }
-    }
 
     public static PackManifest LoadExisting(string path)
     {
@@ -43,7 +23,6 @@ public class PackManifest
         }
 
         var model = Toml.ToModel<PackManifest>(File.ReadAllText(path));
-        model.Initialize();
         return model;
     }
 
@@ -66,7 +45,6 @@ public class PackManifest
             model = Defaults.CreateManifestFromBase();
         }
 
-        model.Initialize();
         return model;
     }
 
@@ -91,10 +69,5 @@ public class PackManifest
         string formattedToml = string.Join("\n", formattedLines);
 
         File.WriteAllText(path, formattedToml);
-    }
-
-    public static implicit operator Tuple<object, object>(PackManifest v)
-    {
-        throw new NotImplementedException();
     }
 }

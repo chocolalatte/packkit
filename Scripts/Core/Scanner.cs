@@ -10,10 +10,11 @@ using Microsoft.VisualBasic;
 using Packkit.Manifest;
 using Tomlyn;
 using Tomlyn.Model;
+using static Packkit.Core.Utils;
 
 namespace Packkit.Core;
 
-public class Scanner
+public static class Scanner
 {
     // Some files may have both a mods.toml and a fabric.mod.json
     // TODO: Parse both files and determine the actual loader
@@ -41,7 +42,7 @@ public class Scanner
         // Main loop
         foreach (var file in modsDirectory)
         {
-            string fileHash = Hasher.Hash(file);
+            string fileHash = Hash(file);
             string fileName = Path.GetFileName(file);
             ModEntry modEntry = null;
 

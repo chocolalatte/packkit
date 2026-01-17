@@ -1,13 +1,32 @@
 using System;
-using System.ComponentModel;
 using System.IO;
+using System.Security.Cryptography;
+using Packkit.Manifest;
 using Packkit.Tags;
 using Tomlyn;
 
-namespace Packkit.Manifest;
+namespace Packkit.Core;
 
 public static class Utils
 {
+    public static string Hash(string filePath)
+    {
+        using var stream = File.OpenRead(filePath);
+        using var sha = SHA256.Create();
+        byte[] hashBytes = sha.ComputeHash(stream);
+        return Convert.ToHexString(hashBytes).ToLowerInvariant();
+    }
+
+    // TODO: Check if still needed
+    public static void SaveBaseManifest(string path = "../base-manifest-generated.toml")
+    {
+        var manifest = CreateBaseManifest();
+        string tomlText = Toml.FromModel(manifest);
+
+        File.WriteAllText(path, tomlText);
+        Console.WriteLine($"[UTILS] [INFO] Base manifest saved at {path}");
+    }
+
     private static PackManifest CreateBaseManifest()
     {
         Customization.TagRegistry tagRegistry = new()
@@ -58,14 +77,5 @@ public static class Utils
             Mods = [],
             Customization = new Customization { Tags = tagRegistry },
         };
-    }
-
-    public static void SaveBaseManifest(string path = "../base-manifest-generated.toml")
-    {
-        var manifest = CreateBaseManifest();
-        string tomlText = Toml.FromModel(manifest);
-
-        File.WriteAllText(path, tomlText);
-        Console.WriteLine($"[UTILS] [INFO] Base manifest saved at {path}");
     }
 }

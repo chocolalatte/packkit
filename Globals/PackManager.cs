@@ -42,7 +42,7 @@ public partial class PackManager : Node
 
     private static void LoadAllPacks()
     {
-        Console.WriteLine("[PACKMANAGEMENT:PACKMANAGER] [INFO] Loading all packs");
+        Console.WriteLine("[GLOBALS:PACKMANAGER] [INFO] Loading all packs");
 
         var packDirectories = Directory.EnumerateDirectories(packsFolder);
 
@@ -67,24 +67,24 @@ public partial class PackManager : Node
 
                 // Log progress
                 packsScannedCount++;
-                Console.WriteLine(
-                    $"[PACKMANAGEMENT:PACKMANAGER] [PROGRESS] [{scannedPackCount()}/{totalPackCount}] Successfully loaded pack \"{packDirectoryName}\""
+                GD.Print(
+                    $"[GLOBALS:PACKMANAGER] [PROGRESS] [{scannedPackCount()}/{totalPackCount}] Successfully loaded pack \"{packDirectoryName}\""
                 );
             }
             catch (Exception exception)
             {
                 // Log progress and error
                 failedScanCount++;
-                Console.WriteLine(
-                    $"[PACKMANAGEMENT:PACKMANAGER] [PROGRESS] [{scannedPackCount()}/{totalPackCount}] Failed to load pack \"{packDirectoryName}\" reason: \"{exception.Message}\""
+                GD.Print(
+                    $"[GLOBALS:PACKMANAGER] [PROGRESS] [{scannedPackCount()}/{totalPackCount}] Failed to load pack \"{packDirectoryName}\" reason: \"{exception.Message}\""
                 );
                 continue;
             }
         }
 
         // Log summary
-        Console.WriteLine(
-            $"[PACKMANAGEMENT:PACKMANAGER] [INFO] {packsScannedCount} out of {totalPackCount} packs loaded successfully: {failedScanCount} packs failed"
+        GD.Print(
+            $"[GLOBALS:PACKMANAGER] [INFO] {packsScannedCount} out of {totalPackCount} packs loaded successfully: {failedScanCount} packs failed"
         );
     }
 
@@ -96,9 +96,7 @@ public partial class PackManager : Node
             // Throw error if no active pack is selected
             if (ActivePack == null)
             {
-                throw new Exception(
-                    $"[PACKMANAGEMENT:PACKMANAGER] [ERROR-003] No active pack selected"
-                );
+                throw new Exception($"[GLOBALS:PACKMANAGER] [ERROR-003] No active pack selected");
             }
 
             guid = ActivePack.Item1;
@@ -111,7 +109,7 @@ public partial class PackManager : Node
         if (!Directory.Exists(packPath))
         {
             throw new DirectoryNotFoundException(
-                $"[PACKMANAGEMENT:PACKMANAGER] [ERROR-001] PackManifest for pack \"{name}\" with guid \"{guid}\" not found at path {packPath}"
+                $"[GLOBALS:PACKMANAGER] [ERROR-001] PackManifest for pack \"{name}\" with guid \"{guid}\" not found at path {packPath}"
             );
         }
 
@@ -120,14 +118,14 @@ public partial class PackManager : Node
 
     public static Guid CreatePack(string packName, string packAuthor)
     {
-        Console.WriteLine($"[PACKMANAGEMENT:PACKMANAGER] [INFO] Creating pack \"{packName}\"");
+        GD.Print($"[GLOBALS:PACKMANAGER] [INFO] Creating pack \"{packName}\"");
         string packPath = Path.Combine(packsFolder, packName);
 
         // Check if pack already exists
         if (Directory.Exists(packPath))
         {
             throw new Exception(
-                $"[PACKMANAGEMENT:PACKMANAGER] [ERROR-002] Pack \"{packName}\" already exists"
+                $"[GLOBALS:PACKMANAGER] [ERROR-002] Pack \"{packName}\" already exists"
             );
         }
 
@@ -151,7 +149,7 @@ public partial class PackManager : Node
         manifest.SaveToFile(packPath + "/manifest.toml");
 
         GD.Print(
-            $"[PACKMANAGEMENT:PACKMANAGER] [INFO] Pack \"{packName}\" created successfully with slug {packSlug}"
+            $"[GLOBALS:PACKMANAGER] [INFO] Pack \"{packName}\" created successfully with slug {packSlug}"
         );
 
         return guid;
@@ -159,14 +157,24 @@ public partial class PackManager : Node
 
     public void DeletePack(Guid packId)
     {
-        GD.Print(
-            $"[PACKMANAGEMENT:PACKMANAGER] [INFO] Deleting pack \"{Packs[packId].Header.Name}\""
-        );
+        string packName = Packs[packId].Header.Name;
+        string packSlug = Packs[packId].Header.Slug;
+        GD.Print($"[GLOBALS:PACKMANAGER] [INFO] Deleting pack \"{packName}\"");
 
-        string packPath = GetPackFolderPath(packId);
-        Directory.Delete(packPath, true);
-        Packs.Remove(packId);
+        try
+        {
+            string packPath = GetPackFolderPath(packId);
+            Directory.Delete(packPath, true);
+            Packs.Remove(packId);
+            EmitSignal(nameof(PackDeleted), packId.ToString());
 
-        EmitSignal(nameof(PackDeleted), packId.ToString());
+            GD.Print(
+                $"[GLOBALS:PACKMANAGER] [INFO] Pack \"{packName}\" with slug \"{packSlug}\" deleted successfully"
+            );
+        }
+        catch (Exception ex)
+        {
+            GD.PrintErr($"[GLOBALS:PACKMANAGER] [ERROR] Failed to delete pack: {ex.Message}");
+        }
     }
 }

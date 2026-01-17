@@ -1,7 +1,7 @@
 using System;
 using Godot;
-using Packkit.Core;
 using Packkit.Globals;
+using static Packkit.Core.Scanner;
 
 namespace Packkit.Ui.Nodes;
 
@@ -36,10 +36,6 @@ public partial class Pack : Control
         {
             GetParent().QueueFree();
         }
-        else
-        {
-            GD.Print($"Not deleting pack {PackId}");
-        }
     }
 
     public void OpenPackFolder()
@@ -49,7 +45,7 @@ public partial class Pack : Control
 
     public void Scan()
     {
-        Scanner.ScanFiles(PackManager.GetPackFolderPath(PackId));
+        ScanFiles(PackManager.GetPackFolderPath(PackId));
     }
 
     public void SetActive()

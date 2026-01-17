@@ -2,6 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using Godot;
 using Packkit.Globals;
+using Packkit.Ui.Nodes;
 
 namespace Packkit.Ui;
 
@@ -18,8 +19,6 @@ public partial class PackList : Control
 
     [Export]
     public PackedScene PackListEntryScene;
-
-    public string NewPackName;
 
     public override void _Ready()
     {
@@ -49,14 +48,9 @@ public partial class PackList : Control
         NewPackMenu.Visible = false;
     }
 
-    private void _on_pack_name_text_edit_text_changed()
-    {
-        NewPackName = PackNameTextEdit.Text;
-    }
-
     private void _on_create_pack_button_pressed()
     {
-        Guid packId = PackManager.CreatePack(NewPackName, "TestAuthor");
+        Guid packId = PackManager.CreatePack(PackNameTextEdit.Text, "TestAuthor");
 
         AddEntry(packId);
     }

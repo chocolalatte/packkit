@@ -9,8 +9,6 @@ public partial class Home : MarginContainer
 {
     [Export]
     public PackedScene ActivePackScene;
-
-    private VBoxContainer ActivePackNode;
     private Pack pack;
 
     public override void _Ready()
@@ -20,12 +18,9 @@ public partial class Home : MarginContainer
 
     public void OnActivePackChanged()
     {
-        if (ActivePackNode == null)
-        {
-            ActivePackNode = (VBoxContainer)ActivePackScene.Instantiate();
-            AddChild(ActivePackNode);
-            pack = (Pack)ActivePackNode.GetNode("Pack");
-        }
+        VBoxContainer activePackNode = (VBoxContainer)ActivePackScene.Instantiate();
+        AddChild(activePackNode);
+        pack = (Pack)activePackNode.GetNode("Pack");
 
         pack.PackId = PackManager.ActivePack.Item1;
         pack.PackNameLabel.Text = PackManager.ActivePack.Item2.Header.Name;

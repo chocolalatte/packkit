@@ -1,14 +1,13 @@
 using System.Collections.Generic;
-using System.Net.NetworkInformation;
 
 namespace Packkit.Manifest;
 
 public partial class ModEntry
 {
-    public string? ModId { get; set; } = null;
-    public string? Name { get; set; } = null;
-    public string? File { get; set; } = null;
-    public string? Version { get; set; } = null;
+    public string ModId { get; set; } = null;
+    public string Name { get; set; } = null;
+    public string File { get; set; } = null;
+    public string Version { get; set; } = null;
     public ModLoader Loader { get; set; } = ModLoader.unknown;
     public ModSide Side { get; set; } = ModSide.unknown;
 

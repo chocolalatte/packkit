@@ -10,8 +10,8 @@ public static class Defaults
 {
     public const string BaseManifestPath = "Scripts/Manifest/base-manifest.toml";
 
-    private static string? _baseManifest = null;
-    private static string? _schemaVersion = null;
+    private static string _baseManifest = null;
+    private static string _schemaVersion = null;
 
     public static string BaseManifest => _baseManifest ??= GetBaseManifest();
     public static string SchemaVersion => _schemaVersion ??= GetSchemaVersionFromEmbedded();
