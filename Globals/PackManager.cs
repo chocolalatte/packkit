@@ -212,5 +212,26 @@ public partial class PackManager : Node
         GD.Print(
             $"[GLOBALS:PACKMANAGER] [INFO] Toggled mod \"{modHash}\" to {Packs[packId].Mods[modHash].Enabled}"
         );
+
+        MoveMod(packId, modHash);
+    }
+
+    private static void MoveMod(Guid packId, string modHash)
+    {
+        ModEntry mod = Packs[packId].Mods[modHash];
+        string enabledModPath = GetPackFolderPath(packId) + "/mods/" + mod.File;
+        string disabledModPath = GetPackFolderPath(packId) + "/disabled/" + mod.File;
+
+        try
+        {
+            if (mod.Enabled)
+                File.Move(disabledModPath, enabledModPath);
+            else
+                File.Move(enabledModPath, disabledModPath);
+        }
+        catch (Exception ex)
+        {
+            GD.PrintErr($"[GLOBALS:PACKMANAGER] [ERROR] Failed to move mod: {ex.Message}\n{ex}");
+        }
     }
 }
