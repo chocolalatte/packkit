@@ -2,7 +2,7 @@ using System;
 using Godot;
 using Packkit.Globals;
 
-namespace Packkit.Ui;
+namespace Packkit.Godot;
 
 public partial class Main : Control
 {

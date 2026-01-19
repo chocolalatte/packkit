@@ -2,9 +2,9 @@ using System;
 using System.Runtime.CompilerServices;
 using Godot;
 using Packkit.Globals;
-using Packkit.Ui.Nodes;
+using Packkit.Godot.Nodes;
 
-namespace Packkit.Ui;
+namespace Packkit.Godot;
 
 public partial class PackList : Control
 {
@@ -15,7 +15,7 @@ public partial class PackList : Control
     public AspectRatioContainer NewPackMenu;
 
     [Export]
-    public TextEdit PackNameTextEdit;
+    public LineEdit PackNameLineEdit;
 
     [Export]
     public PackedScene PackListEntryScene;
@@ -38,6 +38,14 @@ public partial class PackList : Control
         PackListEntryContainer.AddChild(entry);
     }
 
+    private void CreatePack()
+    {
+        Guid packId = PackManager.CreatePack(PackNameLineEdit.Text, "TestAuthor");
+
+        AddEntry(packId);
+        PackNameLineEdit.Text = "";
+    }
+
     private void _on_create_pack_menu_button_pressed()
     {
         NewPackMenu.Visible = true;
@@ -50,8 +58,11 @@ public partial class PackList : Control
 
     private void _on_create_pack_button_pressed()
     {
-        Guid packId = PackManager.CreatePack(PackNameTextEdit.Text, "TestAuthor");
+        CreatePack();
+    }
 
-        AddEntry(packId);
+    private void _on_pack_name_line_edit_text_submitted(string newText)
+    {
+        CreatePack();
     }
 }

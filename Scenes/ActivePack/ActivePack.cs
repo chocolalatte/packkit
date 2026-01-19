@@ -2,9 +2,9 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Godot;
 using Packkit.Globals;
-using Packkit.Ui.Nodes;
+using Packkit.Godot.Nodes;
 
-namespace Packkit.Ui;
+namespace Packkit.Godot;
 
 public partial class ActivePack : VBoxContainer
 {

@@ -1,15 +1,15 @@
 using System;
 using Godot;
 using Packkit.Globals;
-using Packkit.Ui.Nodes;
+using Packkit.Godot.Nodes;
 
-namespace Packkit.Ui;
+namespace Packkit.Godot;
 
 public partial class Home : MarginContainer
 {
     [Export]
     public PackedScene ActivePackScene;
-    private Pack pack;
+    private ActivePack ActivePackNode;
 
     public override void _Ready()
     {
@@ -18,9 +18,15 @@ public partial class Home : MarginContainer
 
     public void OnActivePackChanged()
     {
-        VBoxContainer activePackNode = (VBoxContainer)ActivePackScene.Instantiate();
-        AddChild(activePackNode);
-        pack = (Pack)activePackNode.GetNode("Pack");
+        if (IsInstanceValid(ActivePackNode))
+        {
+            ActivePackNode.QueueFree();
+            ActivePackNode = null;
+        }
+
+        ActivePackNode = ActivePackScene.Instantiate<ActivePack>();
+        AddChild(ActivePackNode);
+        Pack pack = ActivePackNode.GetNode<Pack>("Pack");
 
         pack.PackId = PackManager.ActivePack.Item1;
         pack.PackNameLabel.Text = PackManager.ActivePack.Item2.Header.Name;

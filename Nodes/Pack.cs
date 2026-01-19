@@ -3,7 +3,7 @@ using Godot;
 using Packkit.Globals;
 using static Packkit.Core.Scanner;
 
-namespace Packkit.Ui.Nodes;
+namespace Packkit.Godot.Nodes;
 
 [GlobalClass]
 public partial class Pack : Control
