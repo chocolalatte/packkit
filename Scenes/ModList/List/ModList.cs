@@ -18,6 +18,8 @@ public partial class ModList : Control
     {
         get { return PackManager.ActivePack?.Item2.Mods; }
     }
+    public static IEnumerable<ModRef> ModRefs =>
+        Mods?.Select(kvp => new ModRef(kvp.Key, kvp.Value));
 
     public override void _Ready()
     {
@@ -36,7 +38,7 @@ public partial class ModList : Control
         {
             try
             {
-                foreach (ModEntry modEntry in Mods.Values)
+                foreach (ModRef modEntry in ModRefs)
                 {
                     AddEntry(modEntry);
                 }
@@ -53,11 +55,11 @@ public partial class ModList : Control
         }
     }
 
-    private void AddEntry(ModEntry modEntry)
+    private void AddEntry(ModRef modRef)
     {
         ModListEntry modListEntry = (ModListEntry)ModListEntryScene.Instantiate();
         ModEntryContainer.AddChild(modListEntry);
-        modListEntry.Initialize(modEntry);
+        modListEntry.Initialize(modRef);
     }
 
     private void _on_toggle_selection_button_toggled(bool toggled)
@@ -77,5 +79,20 @@ public partial class ModList : Control
                 child.CheckBox.ButtonPressed = false;
             }
         }
+    }
+
+    private void _on_disable_mods_button_pressed()
+    {
+        Guid packId = PackManager.ActivePack.Item1;
+        List<string> modHashes = [];
+        foreach (ModListEntry child in ModEntryContainer.GetChildren().OfType<ModListEntry>())
+        {
+            if (child.CheckBox.ButtonPressed)
+            {
+                modHashes.Add(child.Mod.FileHash);
+            }
+        }
+
+        PackManager.ToggleModsEnabled(packId, modHashes);
     }
 }

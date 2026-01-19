@@ -12,11 +12,11 @@ public partial class ModListEntry : HBoxContainer
 
     [Export]
     public Label NameLabel;
-    public ModEntry Mod;
+    public ModRef Mod;
 
-    public void Initialize(ModEntry mod)
+    public void Initialize(ModRef modRef)
     {
-        Mod = mod;
-        NameLabel.Text = Mod.Name;
+        Mod = modRef;
+        NameLabel.Text = Mod.Entry.Name;
     }
 }

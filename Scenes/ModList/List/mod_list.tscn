@@ -22,15 +22,19 @@ anchor_bottom = 0.2
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer"]
+[node name="ToggleSelectionContainer" type="HBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer/ToggleSelectionContainer"]
 layout_mode = 2
 text = "Toggle Selection"
 
-[node name="ToggleSelectionButton" type="CheckButton" parent="HBoxContainer/HBoxContainer"]
+[node name="ToggleSelectionButton" type="CheckButton" parent="HBoxContainer/ToggleSelectionContainer"]
 layout_mode = 2
+
+[node name="DisableModsButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "Dissable Selected Mods"
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -49,4 +53,5 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[connection signal="toggled" from="HBoxContainer/HBoxContainer/ToggleSelectionButton" to="." method="_on_toggle_selection_button_toggled"]
+[connection signal="toggled" from="HBoxContainer/ToggleSelectionContainer/ToggleSelectionButton" to="." method="_on_toggle_selection_button_toggled"]
+[connection signal="pressed" from="HBoxContainer/DisableModsButton" to="." method="_on_disable_mods_button_pressed"]

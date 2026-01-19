@@ -2,6 +2,8 @@ using System.Collections.Generic;
 
 namespace Packkit.Manifest;
 
+public readonly record struct ModRef(string FileHash, ModEntry Entry);
+
 public partial class ModEntry
 {
     public string ModId { get; set; } = null;
@@ -17,6 +19,8 @@ public partial class ModEntry
     public List<string> Recommends { get; set; } = [];
 
     public ModTags Tags { get; set; } = new();
+
+    public bool Enabled { get; set; } = true;
 }
 
 public class ModTags

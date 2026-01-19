@@ -193,4 +193,24 @@ public partial class PackManager : Node
             GD.PrintErr($"[GLOBALS:PACKMANAGER] [ERROR] Failed to delete pack: {ex.Message}");
         }
     }
+
+    public static void ToggleModsEnabled(Guid packId, List<string> modHashes)
+    {
+        foreach (string modHash in modHashes)
+        {
+            ToggleModEnabled(packId, modHash);
+        }
+
+        Packs[packId].SaveToFile(GetPackFolderPath(packId) + "/manifest.toml");
+    }
+
+    private static void ToggleModEnabled(Guid packId, string modHash)
+    {
+        bool currentlyEnabled = Packs[packId].Mods[modHash].Enabled;
+
+        Packs[packId].Mods[modHash].Enabled = !currentlyEnabled;
+        GD.Print(
+            $"[GLOBALS:PACKMANAGER] [INFO] Toggled mod \"{modHash}\" to {Packs[packId].Mods[modHash].Enabled}"
+        );
+    }
 }
