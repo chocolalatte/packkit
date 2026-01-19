@@ -30,7 +30,23 @@ public partial class PackManager : Node
 
     public void SetActivePack(Guid packId)
     {
-        ActivePack = Tuple.Create(packId, Packs[packId]);
+        var NewActivePack = Tuple.Create(packId, Packs[packId]);
+        // Check if pack is already active
+        if (ActivePack?.Item1 == NewActivePack.Item1)
+        {
+            GD.Print(
+                $"[GLOBALS:PACKMANAGER] [INFO] Active pack already set to \"{NewActivePack.Item2.Header.Name}\""
+            );
+            return;
+        }
+
+        GD.Print(
+            $"[GLOBALS:PACKMANAGER] [INFO] Active pack changed to \"{NewActivePack.Item2.Header.Name}\""
+        );
+
+        // Set new active pack
+        ActivePack = NewActivePack;
+
         EmitSignal(nameof(ActivePackChanged));
     }
 

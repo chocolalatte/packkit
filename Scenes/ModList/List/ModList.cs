@@ -13,24 +13,42 @@ public partial class ModList : Control
 
     [Export]
     public PackedScene ModListEntryScene;
-    public Dictionary<string, ModEntry> mods;
+    public static Dictionary<string, ModEntry> Mods
+    {
+        get { return PackManager.ActivePack?.Item2.Mods; }
+    }
 
-    public override void _Ready() { }
+    public override void _Ready()
+    {
+        PackManager.PackManagerInstance.ActivePackChanged += PopulateModList;
+    }
 
     public void PopulateModList()
     {
-        mods = PackManager.ActivePack.Item2.Mods;
-        foreach (ModEntry modEntry in mods.Values)
+        GD.Print($"[MODLIST] [INFO] Populating mod list");
+        foreach (var child in ModEntryContainer.GetChildren())
         {
-            AddEntry(modEntry);
+            child.QueueFree();
         }
-    }
 
-    public void _on_visibility_changed()
-    {
-        if (Visible)
+        if (Mods?.Count > 0)
         {
-            PopulateModList();
+            try
+            {
+                foreach (ModEntry modEntry in Mods.Values)
+                {
+                    AddEntry(modEntry);
+                }
+                GD.Print($"[MODLIST] [INFO] Successfully populated mod list");
+            }
+            catch (Exception ex)
+            {
+                GD.Print($"[MODLIST] [ERROR] Failed to populate mod list: {ex.Message}");
+            }
+        }
+        else
+        {
+            GD.Print($"[MODLIST] [WARN] No mods found");
         }
     }
 

@@ -20,11 +20,24 @@ public partial class PackList : Control
     [Export]
     public PackedScene PackListEntryScene;
 
-    public override void _Ready()
+    public void PopulatePackList()
     {
+        GD.Print($"[PACKLIST] [INFO] Populating pack list");
         foreach (var pack in PackManager.Packs)
         {
             AddEntry(pack.Key);
+        }
+    }
+
+    private void _on_visibility_changed()
+    {
+        if (
+            Visible
+            && PackManager.Packs.Count > 0
+            && PackListEntryContainer.GetChildren().Count == 0
+        )
+        {
+            PopulatePackList();
         }
     }
 

@@ -75,6 +75,7 @@ text = "Create Pack"
 layout_mode = 2
 text = "Back"
 
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
 [connection signal="pressed" from="CreatePackMenuButton" to="." method="_on_create_pack_menu_button_pressed"]
 [connection signal="text_submitted" from="NewPackMenu/VBoxContainer/PackNameLineEdit" to="." method="_on_pack_name_line_edit_text_submitted"]
 [connection signal="pressed" from="NewPackMenu/VBoxContainer/CreatePackButton" to="." method="_on_create_pack_button_pressed"]
