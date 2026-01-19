@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://dpaq748b1yhl4"]
+
+[ext_resource type="Script" uid="uid://cktr7wya6khim" path="res://Scenes/ModList/List/ModList.cs" id="1_inxck"]
+[ext_resource type="PackedScene" uid="uid://bo3h8w7cqx0h" path="res://Scenes/ModList/Entry/mod_list_entry.tscn" id="2_7oewr"]
+
+[node name="ModList" type="Control" node_paths=PackedStringArray("ModEntryContainer")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_inxck")
+ModEntryContainer = NodePath("ScrollContainer/ModEntryContainer")
+ModListEntryScene = ExtResource("2_7oewr")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ModEntryContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
