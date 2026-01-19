@@ -24,11 +24,10 @@ public sealed class Scanner : IDisposable
     public Scanner(string folderPath)
     {
         GD.Print($"[SCANNER] [INFO] Scanner initialized");
-        ScanFiles(folderPath);
+        ScanAllMods(folderPath);
     }
 
     private PackManifest manifest;
-    private IEnumerable<string> modFilePaths;
 
     // Variables for keeping track of progress
     private int totalFileCount = 0;
@@ -40,15 +39,18 @@ public sealed class Scanner : IDisposable
     // Some files may have both a mods.toml and a fabric.mod.json
     // TODO: Parse both files and determine the actual loader
     // TODO: Add support for other loaders
-    public void ScanFiles(string packPath)
+    public void ScanAllMods(string packPath)
     {
         GD.Print($"[SCANNER] [INFO] Scanning mods for pack: {Path.GetFileName(packPath)}");
 
-        string manifestPath = $"{packPath}/manifest.toml";
-        string modDirectoryPath = $"{packPath}/mods";
-
+        string manifestPath = Path.Combine(packPath, "manifest.toml");
         manifest = PackManifest.LoadOrCreate(manifestPath);
-        modFilePaths = Directory.EnumerateFiles(modDirectoryPath);
+
+        string modsDirectoryPath = Path.Combine(packPath, "mods");
+        string disabledDirectoryPath = Path.Combine(packPath, "disabled");
+        IEnumerable<string> modFilePaths = Directory
+            .EnumerateFiles(modsDirectoryPath)
+            .Concat(Directory.EnumerateFiles(disabledDirectoryPath));
 
         totalFileCount = modFilePaths.Count();
 

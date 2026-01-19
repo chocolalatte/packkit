@@ -147,6 +147,7 @@ public partial class PackManager : Node
 
         Directory.CreateDirectory(packPath);
         Directory.CreateDirectory(packPath + "/mods");
+        Directory.CreateDirectory(packPath + "/disabled");
 
         PackManifest manifest = Toml.ToModel<PackManifest>(Defaults.BaseManifest);
 
@@ -190,7 +191,7 @@ public partial class PackManager : Node
         }
         catch (Exception ex)
         {
-            GD.PrintErr($"[GLOBALS:PACKMANAGER] [ERROR] Failed to delete pack: {ex.Message}");
+            GD.PrintErr($"[GLOBALS:PACKMANAGER] [ERROR-004] Failed to delete pack: {ex.Message}");
         }
     }
 
@@ -198,40 +199,47 @@ public partial class PackManager : Node
     {
         foreach (string modHash in modHashes)
         {
-            ToggleModEnabled(packId, modHash);
-        }
+            if (!Packs[packId].Mods.TryGetValue(modHash, out ModEntry modEntry))
+            {
+                GD.Print($"[GLOBALS:PACKMANAGER] [ERROR-005] Mod \"{modHash}\" not found in pack");
+                continue;
+            }
 
-        Packs[packId].SaveToFile(GetPackFolderPath(packId) + "/manifest.toml");
-    }
+            string packPath = GetPackFolderPath(packId);
+            string enabledModPath = Path.Combine(packPath, "mods", modEntry.File);
+            string disabledModPath = Path.Combine(packPath, "disabled", modEntry.File);
 
-    private static void ToggleModEnabled(Guid packId, string modHash)
-    {
-        bool currentlyEnabled = Packs[packId].Mods[modHash].Enabled;
+            string sourcePath;
+            string targetPath;
 
-        Packs[packId].Mods[modHash].Enabled = !currentlyEnabled;
-        GD.Print(
-            $"[GLOBALS:PACKMANAGER] [INFO] Toggled mod \"{modHash}\" to {Packs[packId].Mods[modHash].Enabled}"
-        );
-
-        MoveMod(packId, modHash);
-    }
-
-    private static void MoveMod(Guid packId, string modHash)
-    {
-        ModEntry mod = Packs[packId].Mods[modHash];
-        string enabledModPath = GetPackFolderPath(packId) + "/mods/" + mod.File;
-        string disabledModPath = GetPackFolderPath(packId) + "/disabled/" + mod.File;
-
-        try
-        {
-            if (mod.Enabled)
-                File.Move(disabledModPath, enabledModPath);
+            if (File.Exists(enabledModPath))
+            {
+                sourcePath = enabledModPath;
+                targetPath = disabledModPath;
+            }
+            else if (File.Exists(disabledModPath))
+            {
+                sourcePath = disabledModPath;
+                targetPath = enabledModPath;
+            }
             else
-                File.Move(enabledModPath, disabledModPath);
-        }
-        catch (Exception ex)
-        {
-            GD.PrintErr($"[GLOBALS:PACKMANAGER] [ERROR] Failed to move mod: {ex.Message}\n{ex}");
+            {
+                GD.Print(
+                    $"[GLOBALS:PACKMANAGER] [ERROR-006] Mod \"{modHash}\" not found in pack \"{Packs[packId].Header.Name}\""
+                );
+                continue;
+            }
+
+            try
+            {
+                File.Move(sourcePath, targetPath);
+            }
+            catch (Exception ex)
+            {
+                GD.Print(
+                    $"[GLOBALS:PACKMANAGER] [ERROR-007] Failed to move mod \"{modEntry.Name}\": \n{ex}"
+                );
+            }
         }
     }
 }

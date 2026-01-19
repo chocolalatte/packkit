@@ -19,8 +19,6 @@ public partial class ModEntry
     public List<string> Recommends { get; set; } = [];
 
     public ModTags Tags { get; set; } = new();
-
-    public bool Enabled { get; set; } = true;
 }
 
 public class ModTags
