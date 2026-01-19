@@ -8,6 +8,9 @@ namespace Packkit.Godot;
 public partial class ModListEntry : HBoxContainer
 {
     [Export]
+    public CheckBox CheckBox;
+
+    [Export]
     public Label NameLabel;
     public ModEntry Mod;
 

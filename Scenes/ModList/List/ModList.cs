@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Packkit.Globals;
 using Packkit.Manifest;
@@ -57,5 +58,24 @@ public partial class ModList : Control
         ModListEntry modListEntry = (ModListEntry)ModListEntryScene.Instantiate();
         ModEntryContainer.AddChild(modListEntry);
         modListEntry.Initialize(modEntry);
+    }
+
+    private void _on_toggle_selection_button_toggled(bool toggled)
+    {
+        if (toggled)
+        {
+            foreach (ModListEntry child in ModEntryContainer.GetChildren().OfType<ModListEntry>())
+            {
+                child.CheckBox.Visible = true;
+            }
+        }
+        else
+        {
+            foreach (ModListEntry child in ModEntryContainer.GetChildren().OfType<ModListEntry>())
+            {
+                child.CheckBox.Visible = false;
+                child.CheckBox.ButtonPressed = false;
+            }
+        }
     }
 }
