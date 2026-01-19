@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using Packkit.Core;
 using Packkit.Globals;
 using static Packkit.Core.Scanner;
 
@@ -45,7 +46,8 @@ public partial class Pack : Control
 
     public void Scan()
     {
-        ScanFiles(PackManager.GetPackFolderPath(PackId));
+        string folderPath = PackManager.GetPackFolderPath(PackId);
+        using Scanner scanner = new(folderPath);
     }
 
     public void SetActive()
