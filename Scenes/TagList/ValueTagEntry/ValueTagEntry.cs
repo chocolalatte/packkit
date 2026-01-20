@@ -52,10 +52,6 @@ public partial class ValueTagEntry : HBoxContainer
             {
                 return TextInput.Text;
             }
-
-            throw new Exception(
-                $"[TAGENTRY:VALUETAGENTRY] [ERROR-002] Value for string type ValueTag \"{Tag.Name}\" is empty"
-            );
         }
         else
         {
@@ -63,6 +59,8 @@ public partial class ValueTagEntry : HBoxContainer
                 $"[TAGENTRY:VALUETAGENTRY] [ERROR-003] Unsupported tag type: {Tag.Type}"
             );
         }
+
+        return null;
     }
 
     private void _on_number_input_value_changed(int value) => isChanged = true;

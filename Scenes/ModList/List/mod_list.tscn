@@ -16,7 +16,8 @@ TagListPopup = NodePath("TagList")
 ModEntryContainer = NodePath("MarginContainer/ScrollContainer/ModEntryContainer")
 ModListEntryScene = ExtResource("2_7oewr")
 
-[node name="TagList" parent="." instance=ExtResource("3_47450")]
+[node name="TagList" parent="." node_paths=PackedStringArray("modList") instance=ExtResource("3_47450")]
+modList = NodePath("..")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -40,10 +41,6 @@ layout_mode = 2
 layout_mode = 2
 text = "Dissable Selected Mods"
 
-[node name="TagsListButton" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-text = "Tags list"
-
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
@@ -63,4 +60,3 @@ size_flags_vertical = 3
 
 [connection signal="toggled" from="HBoxContainer/ToggleSelectionContainer/ToggleSelectionButton" to="." method="_on_toggle_selection_button_toggled"]
 [connection signal="pressed" from="HBoxContainer/DisableModsButton" to="." method="_on_disable_mods_button_pressed"]
-[connection signal="pressed" from="HBoxContainer/TagsListButton" to="." method="_on_tags_list_button_pressed"]

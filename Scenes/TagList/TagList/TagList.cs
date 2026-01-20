@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using Godot;
 using Packkit.Globals;
 using Packkit.Godot.Nodes;
@@ -12,6 +14,9 @@ namespace Packkit.Godot;
 
 public partial class TagList : Popup
 {
+    [Export]
+    private ModList modList;
+
     [Export]
     private PackedScene SimpleTagEntryScene;
 
@@ -31,6 +36,10 @@ public partial class TagList : Popup
 
     public void UpdateTagList()
     {
+        foreach (var child in TagEntryContainer.GetChildren())
+        {
+            child.QueueFree();
+        }
         GD.Print($"[TAGLIST] [INFO] Updating tag list");
         foreach (var tag in PackManager.ActivePack?.Item2.Customization.Tags.SimpleTags)
         {
@@ -76,21 +85,34 @@ public partial class TagList : Popup
 
     private void GetSelectedTags()
     {
+        using Tagger tagger = new(PackManager.ActivePack?.Item2);
         foreach (var tagEntry in TagEntryContainer.GetChildren())
         {
             if (tagEntry is SimpleTagEntry simpleTagEntry)
             {
                 if (simpleTagEntry.IsSelected)
                 {
-                    GD.Print($"[TAGLIST] [INFO] Selected tag: \"{simpleTagEntry.Tag.Name}\"");
+                    tagger.SimpleTags.Add(simpleTagEntry.Tag);
+                }
+                else
+                {
+                    GD.Print($"[TAGLIST] [INFO] Unselected tag: \"{simpleTagEntry.Tag.Name}\"");
                 }
             }
             else if (tagEntry is ValueTagEntry valueTagEntry)
             {
                 if (valueTagEntry.GetValue() != null)
                 {
+                    ValueTagInstance valueTagInstance = new(
+                        valueTagEntry.Tag,
+                        valueTagEntry.GetValue()
+                    );
+                    tagger.ValueTags.Add(valueTagInstance);
+                }
+                else
+                {
                     GD.Print(
-                        $"[TAGLIST] [INFO] Selected tag: \"{valueTagEntry.Tag.Name}\" with value \"{valueTagEntry.GetValue()}\""
+                        $"[TAGLIST] [WARN] Value tag value is null: \"{valueTagEntry.Tag.Name}\""
                     );
                 }
             }
@@ -98,11 +120,21 @@ public partial class TagList : Popup
             {
                 if (enumTagEntry.GetValue() != null)
                 {
+                    EnumTagInstance enumTagInstance = new(
+                        enumTagEntry.Tag,
+                        enumTagEntry.GetValue()
+                    );
+                    tagger.EnumTags.Add(enumTagInstance);
+                }
+                else
+                {
                     GD.Print(
-                        $"[TAGLIST] [INFO] Selected tag: \"{enumTagEntry.Tag.Name}\" with value \"{enumTagEntry.GetValue()}\""
+                        $"[TAGLIST] [WARN] Enum tag value is null: \"{enumTagEntry.Tag.Name}\""
                     );
                 }
             }
         }
+        tagger.AddAllTags(modList.SelectedMod.Entry);
+        tagger.Save();
     }
 }

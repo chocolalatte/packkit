@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Godot;
@@ -19,13 +20,27 @@ public sealed class Tagger : IDisposable
     }
 
     private readonly PackManifest Manifest;
-    private List<SimpleTagDefinition> SimpleTags;
-    private List<ValueTagDefinition> ValueTags;
-    private List<EnumTagDefinition> EnumTags;
 
-    public void AddSimpleTags(ModEntry modEntry, List<SimpleTagDefinition> tags)
+    public List<SimpleTagDefinition> SimpleTags = [];
+    public List<ValueTagInstance> ValueTags = [];
+    public List<EnumTagInstance> EnumTags = [];
+
+    private List<SimpleTagDefinition> SimpleTagDefinitions;
+    private List<ValueTagDefinition> ValueTagDefinitions;
+    private List<EnumTagDefinition> EnumTagDefinitions;
+
+    public void AddAllTags(ModEntry modEntry)
     {
-        SimpleTags = Manifest.Customization.Tags.SimpleTags;
+        AddSimpleTags(modEntry);
+        AddValueTags(modEntry);
+        AddEnumTags(modEntry);
+    }
+
+    public void AddSimpleTags(ModEntry modEntry)
+    {
+        List<SimpleTagDefinition> tags = SimpleTags;
+        SimpleTagDefinitions = Manifest.Customization.Tags.SimpleTags;
+
         foreach (SimpleTagDefinition tag in tags)
         {
             AddSimpleTag(modEntry, tag);
@@ -36,7 +51,7 @@ public sealed class Tagger : IDisposable
     {
         // Check if tag exists in manifest's tag definitions
         // Return and log error if it doesn't
-        if (!SimpleTags.Any(t => t.Name == tag.Name))
+        if (!SimpleTagDefinitions.Any(t => t.Name == tag.Name))
         {
             GD.Print(
                 $"[MANIFEST:TAGGER] [ERROR-001] SimpleTag \"{tag.Name}\" not found in manifest"
@@ -59,9 +74,10 @@ public sealed class Tagger : IDisposable
         GD.Print($"[MANIFEST:TAGGER] [INFO] Added SimpleTag \"{tag}\" to \"{modEntry.Name}\"");
     }
 
-    public void AddValueTags(ModEntry modEntry, List<ValueTagInstance> tags)
+    public void AddValueTags(ModEntry modEntry)
     {
-        ValueTags = Manifest.Customization.Tags.ValueTags;
+        List<ValueTagInstance> tags = ValueTags;
+        ValueTagDefinitions = Manifest.Customization.Tags.ValueTags;
         foreach (ValueTagInstance tag in tags)
         {
             AddValueTag(modEntry, tag);
@@ -74,7 +90,7 @@ public sealed class Tagger : IDisposable
         var value = tagInstance.Value;
         // Check if tag exists in manifest's tag definitions
         // Return and log error if it doesn't
-        if (!ValueTags.Any(t => t.Name == tag.Name))
+        if (!ValueTagDefinitions.Any(t => t.Name == tag.Name))
         {
             GD.Print(
                 $"[MANIFEST:TAGGER] [ERROR-002] ValueTag \"{tag.Name}\" not found in manifest"
@@ -83,7 +99,7 @@ public sealed class Tagger : IDisposable
         }
 
         var normalizedValue = NormalizeValueTagObject(
-            ValueTags.First(t => t.Name == tag.Name),
+            ValueTagDefinitions.First(t => t.Name == tag.Name),
             value
         );
         // Check if tag already has same value
@@ -119,9 +135,10 @@ public sealed class Tagger : IDisposable
         };
     }
 
-    public void AddEnumTags(ModEntry modEntry, List<EnumTagInstance> tags)
+    public void AddEnumTags(ModEntry modEntry)
     {
-        EnumTags = Manifest.Customization.Tags.EnumTags;
+        List<EnumTagInstance> tags = EnumTags;
+        EnumTagDefinitions = Manifest.Customization.Tags.EnumTags;
         foreach (EnumTagInstance tag in tags)
         {
             AddEnumTag(modEntry, tag);
@@ -132,7 +149,7 @@ public sealed class Tagger : IDisposable
     {
         var tag = tagInstance.Definition;
         var value = tagInstance.Value;
-        var enumTag = EnumTags.FirstOrDefault(t => t.Name == tag.Name);
+        var enumTag = EnumTagDefinitions.FirstOrDefault(t => t.Name == tag.Name);
 
         // Check if tag exists in manifest's tag definitions
         // Return and log error if it doesn't
@@ -170,9 +187,17 @@ public sealed class Tagger : IDisposable
         );
     }
 
+    public void Save()
+    {
+        string path = Path.Combine(
+            PackManager.GetPackFolderPath(Guid.Parse(Manifest.Header.Id)),
+            "manifest.toml"
+        );
+        Manifest.SaveToFile(path);
+    }
+
     public void Dispose()
     {
-        Manifest.SaveToFile(PackManager.GetPackFolderPath(Guid.Parse(Manifest.Header.Id)));
         GD.Print($"[MANIFEST:TAGGER] [INFO] Tagger disposed");
     }
 }

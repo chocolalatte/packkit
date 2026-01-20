@@ -2,12 +2,13 @@
 
 [ext_resource type="Script" uid="uid://c2f6xnv5u1lvx" path="res://Scenes/ModList/Entry/ModListEntry.cs" id="1_lhjpy"]
 
-[node name="ModListEntry" type="HBoxContainer" node_paths=PackedStringArray("CheckBox", "NameLabel")]
+[node name="ModListEntry" type="HBoxContainer" node_paths=PackedStringArray("CheckBox", "NameLabel", "EditTagsButton")]
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_lhjpy")
 CheckBox = NodePath("CheckBox")
 NameLabel = NodePath("NameLabel")
+EditTagsButton = NodePath("EditTagsButton")
 
 [node name="CheckBox" type="CheckBox" parent="."]
 visible = false
@@ -15,3 +16,9 @@ layout_mode = 2
 
 [node name="NameLabel" type="Label" parent="."]
 layout_mode = 2
+
+[node name="EditTagsButton" type="Button" parent="."]
+layout_mode = 2
+text = "Edit Tags"
+
+[connection signal="pressed" from="EditTagsButton" to="." method="_on_edit_tags_button_pressed"]

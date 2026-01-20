@@ -18,6 +18,8 @@ public partial class ModList : Control
 
     [Export]
     public PackedScene ModListEntryScene;
+
+    public ModRef SelectedMod;
     public static Dictionary<string, ModEntry> Mods
     {
         get { return PackManager.ActivePack?.Item2.Mods; }
@@ -43,24 +45,19 @@ public partial class ModList : Control
             child.QueueFree();
         }
 
-        if (Mods?.Count > 0)
-        {
-            try
-            {
-                foreach (ModRef modEntry in ModRefs)
-                {
-                    AddEntry(modEntry);
-                }
-                GD.Print($"[MODLIST] [INFO] Successfully populated mod list");
-            }
-            catch (Exception ex)
-            {
-                GD.Print($"[MODLIST] [ERROR] Failed to populate mod list: {ex.Message}");
-            }
-        }
-        else
-        {
+        if (!(Mods?.Count > 0))
             GD.Print($"[MODLIST] [WARN] No mods found");
+        try
+        {
+            foreach (ModRef modEntry in ModRefs)
+            {
+                AddEntry(modEntry);
+            }
+            GD.Print($"[MODLIST] [INFO] Successfully populated mod list");
+        }
+        catch (Exception ex)
+        {
+            GD.Print($"[MODLIST] [ERROR] Failed to populate mod list: {ex.Message}");
         }
     }
 
@@ -68,7 +65,14 @@ public partial class ModList : Control
     {
         ModListEntry modListEntry = (ModListEntry)ModListEntryScene.Instantiate();
         ModEntryContainer.AddChild(modListEntry);
+        modListEntry.EditTagsButtonPressed += ShowTagList;
         modListEntry.Initialize(modRef);
+    }
+
+    private void ShowTagList(ModListEntry modListEntry)
+    {
+        TagListPopup.Visible = true;
+        SelectedMod = modListEntry.Mod;
     }
 
     private void _on_toggle_selection_button_toggled(bool toggled)
@@ -103,10 +107,5 @@ public partial class ModList : Control
         }
 
         PackManager.ToggleModsEnabled(packId, modHashes);
-    }
-
-    private void _on_tags_list_button_pressed()
-    {
-        TagListPopup.Visible = true;
     }
 }
