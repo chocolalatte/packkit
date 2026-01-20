@@ -11,7 +11,7 @@ namespace Packkit.Godot;
 public partial class ModList : Control
 {
     [Export]
-    public OptionButton TagListOptionButton;
+    private Popup TagListPopup;
 
     [Export]
     public VBoxContainer ModEntryContainer;
@@ -25,8 +25,6 @@ public partial class ModList : Control
     public static IEnumerable<ModRef> ModRefs =>
         Mods?.Select(kvp => new ModRef(kvp.Key, kvp.Value));
 
-    private readonly Dictionary<int, TagDefinitions.SimpleTagDefinition> SimpleTags = [];
-
     public override void _Ready()
     {
         PackManager.PackManagerInstance.ActivePackChanged += UpdateModList;
@@ -35,16 +33,6 @@ public partial class ModList : Control
     public void UpdateModList()
     {
         PopulateModList();
-        PopulateTagList();
-    }
-
-    private void PopulateTagList()
-    {
-        foreach (var tag in PackManager.ActivePack?.Item2.Customization.Tags.SimpleTags)
-        {
-            TagListOptionButton.AddItem(tag.Name);
-            SimpleTags.Add(TagListOptionButton.GetItemCount() - 1, tag);
-        }
     }
 
     private void PopulateModList()
@@ -117,8 +105,8 @@ public partial class ModList : Control
         PackManager.ToggleModsEnabled(packId, modHashes);
     }
 
-    private void _on_option_button_item_selected(int index)
+    private void _on_tags_list_button_pressed()
     {
-        GD.Print($"[MODLIST] [INFO] Option button selected: {SimpleTags[index].Name}");
+        TagListPopup.Visible = true;
     }
 }

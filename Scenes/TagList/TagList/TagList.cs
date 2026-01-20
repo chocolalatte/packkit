@@ -3,14 +3,18 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Godot;
 using Packkit.Globals;
+using Packkit.Godot.TagEntry;
 using static Packkit.Tags.TagDefinitions;
 
 namespace Packkit.Godot;
 
-public partial class TagList : Control
+public partial class TagList : Popup
 {
     [Export]
     private PackedScene SimpleTagEntryScene;
+
+    [Export]
+    private PackedScene ValueTagEntryScene;
 
     [Export]
     private VBoxContainer TagEntryContainer;
@@ -22,9 +26,15 @@ public partial class TagList : Control
 
     public void UpdateTagList()
     {
+        GD.Print($"[TAGLIST] [INFO] Updating tag list");
         foreach (var tag in PackManager.ActivePack?.Item2.Customization.Tags.SimpleTags)
         {
             AddSimpleTag(tag);
+        }
+
+        foreach (var tag in PackManager.ActivePack?.Item2.Customization.Tags.ValueTags)
+        {
+            AddValueTag(tag);
         }
     }
 
@@ -33,5 +43,12 @@ public partial class TagList : Control
         SimpleTagEntry simpleTagEntry = (SimpleTagEntry)SimpleTagEntryScene.Instantiate();
         simpleTagEntry.Initialize(tag);
         TagEntryContainer.AddChild(simpleTagEntry);
+    }
+
+    private void AddValueTag(ValueTagDefinition tag)
+    {
+        ValueTagEntry valueTagEntry = (ValueTagEntry)ValueTagEntryScene.Instantiate();
+        valueTagEntry.Initialize(tag);
+        TagEntryContainer.AddChild(valueTagEntry);
     }
 }

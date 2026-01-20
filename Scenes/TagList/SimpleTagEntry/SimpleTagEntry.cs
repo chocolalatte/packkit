@@ -2,7 +2,7 @@ using System;
 using Godot;
 using static Packkit.Tags.TagDefinitions;
 
-namespace Packkit.Godot;
+namespace Packkit.Godot.TagEntry;
 
 public partial class SimpleTagEntry : HBoxContainer
 {

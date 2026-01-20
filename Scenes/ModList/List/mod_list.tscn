@@ -1,9 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://dpaq748b1yhl4"]
+[gd_scene load_steps=4 format=3 uid="uid://dpaq748b1yhl4"]
 
 [ext_resource type="Script" uid="uid://cktr7wya6khim" path="res://Scenes/ModList/List/ModList.cs" id="1_inxck"]
 [ext_resource type="PackedScene" uid="uid://bo3h8w7cqx0h" path="res://Scenes/ModList/Entry/mod_list_entry.tscn" id="2_7oewr"]
+[ext_resource type="PackedScene" uid="uid://baf2iwnbko8ik" path="res://Scenes/TagList/TagList/tag_list.tscn" id="3_47450"]
 
-[node name="ModList" type="Control" node_paths=PackedStringArray("TagListOptionButton", "ModEntryContainer")]
+[node name="ModList" type="Control" node_paths=PackedStringArray("TagListPopup", "ModEntryContainer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,9 +12,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_inxck")
-TagListOptionButton = NodePath("HBoxContainer/TagListOptionButton")
+TagListPopup = NodePath("TagList")
 ModEntryContainer = NodePath("MarginContainer/ScrollContainer/ModEntryContainer")
 ModListEntryScene = ExtResource("2_7oewr")
+
+[node name="TagList" parent="." instance=ExtResource("3_47450")]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -37,9 +40,9 @@ layout_mode = 2
 layout_mode = 2
 text = "Dissable Selected Mods"
 
-[node name="TagListOptionButton" type="OptionButton" parent="HBoxContainer"]
+[node name="TagsListButton" type="Button" parent="HBoxContainer"]
 layout_mode = 2
-flat = true
+text = "Tags list"
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -60,4 +63,4 @@ size_flags_vertical = 3
 
 [connection signal="toggled" from="HBoxContainer/ToggleSelectionContainer/ToggleSelectionButton" to="." method="_on_toggle_selection_button_toggled"]
 [connection signal="pressed" from="HBoxContainer/DisableModsButton" to="." method="_on_disable_mods_button_pressed"]
-[connection signal="item_selected" from="HBoxContainer/TagListOptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="pressed" from="HBoxContainer/TagsListButton" to="." method="_on_tags_list_button_pressed"]

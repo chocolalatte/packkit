@@ -1,23 +1,32 @@
-[gd_scene load_steps=3 format=3 uid="uid://baf2iwnbko8ik"]
+[gd_scene load_steps=5 format=3 uid="uid://baf2iwnbko8ik"]
 
+[ext_resource type="Theme" uid="uid://3hr4w4qvr5wt" path="res://Themes/tag_list.tres" id="1_ukp8w"]
 [ext_resource type="Script" uid="uid://p5kb4r5huwl4" path="res://Scenes/TagList/TagList/TagList.cs" id="1_xpa8u"]
 [ext_resource type="PackedScene" uid="uid://cpnloi1qxa7fe" path="res://Scenes/TagList/SimpleTagEntry/simple_tag_entry.tscn" id="2_34c6y"]
+[ext_resource type="PackedScene" uid="uid://bfqxjhm5qmsnx" path="res://Scenes/TagList/ValueTagEntry/value_tag_entry.tscn" id="4_e3xyx"]
 
-[node name="TagList" type="Control" node_paths=PackedStringArray("TagEntryContainer")]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="TagList" type="Popup" node_paths=PackedStringArray("TagEntryContainer")]
+oversampling_override = 1.0
+initial_position = 1
+size = Vector2i(320, 320)
+visible = true
+min_size = Vector2i(320, 320)
+theme = ExtResource("1_ukp8w")
 script = ExtResource("1_xpa8u")
 SimpleTagEntryScene = ExtResource("2_34c6y")
-TagEntryContainer = NodePath("TagListEntryContainer")
+ValueTagEntryScene = ExtResource("4_e3xyx")
+TagEntryContainer = NodePath("PanelContainer/ScrollContainer/TagListEntryContainer")
 
-[node name="TagListEntryContainer" type="VBoxContainer" parent="."]
-layout_mode = 1
+[node name="PanelContainer" type="PanelContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="TagListEntryContainer" type="VBoxContainer" parent="PanelContainer/ScrollContainer"]
+layout_mode = 2

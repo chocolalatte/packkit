@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfqxjhm5qmsnx"]
+
+[ext_resource type="Script" uid="uid://cxkvfklvl01fw" path="res://Scenes/TagList/ValueTagEntry/ValueTagEntry.cs" id="1_nto41"]
+
+[node name="HBoxContainer" type="HBoxContainer" node_paths=PackedStringArray("NumberInput", "TextInput", "TagNameLabel")]
+offset_right = 40.0
+script = ExtResource("1_nto41")
+NumberInput = NodePath("NumberInput")
+TextInput = NodePath("TextInput")
+TagNameLabel = NodePath("Label")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "TagName"
+
+[node name="NumberInput" type="SpinBox" parent="."]
+visible = false
+layout_mode = 2
+allow_greater = true
+allow_lesser = true
+
+[node name="TextInput" type="LineEdit" parent="."]
+visible = false
+layout_mode = 2
+placeholder_text = "Value"
