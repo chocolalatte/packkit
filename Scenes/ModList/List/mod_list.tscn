@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cktr7wya6khim" path="res://Scenes/ModList/List/ModList.cs" id="1_inxck"]
 [ext_resource type="PackedScene" uid="uid://bo3h8w7cqx0h" path="res://Scenes/ModList/Entry/mod_list_entry.tscn" id="2_7oewr"]
 
-[node name="ModList" type="Control" node_paths=PackedStringArray("ModEntryContainer")]
+[node name="ModList" type="Control" node_paths=PackedStringArray("TagListOptionButton", "ModEntryContainer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,6 +11,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_inxck")
+TagListOptionButton = NodePath("HBoxContainer/TagListOptionButton")
 ModEntryContainer = NodePath("MarginContainer/ScrollContainer/ModEntryContainer")
 ModListEntryScene = ExtResource("2_7oewr")
 
@@ -36,6 +37,10 @@ layout_mode = 2
 layout_mode = 2
 text = "Dissable Selected Mods"
 
+[node name="TagListOptionButton" type="OptionButton" parent="HBoxContainer"]
+layout_mode = 2
+flat = true
+
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
@@ -55,3 +60,4 @@ size_flags_vertical = 3
 
 [connection signal="toggled" from="HBoxContainer/ToggleSelectionContainer/ToggleSelectionButton" to="." method="_on_toggle_selection_button_toggled"]
 [connection signal="pressed" from="HBoxContainer/DisableModsButton" to="." method="_on_disable_mods_button_pressed"]
+[connection signal="item_selected" from="HBoxContainer/TagListOptionButton" to="." method="_on_option_button_item_selected"]

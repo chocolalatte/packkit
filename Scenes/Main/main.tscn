@@ -25,9 +25,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 0
+current_tab = 2
 
 [node name="Home" type="MarginContainer" parent="TabContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("3_p6jpk")
 ActivePackScene = ExtResource("3_5yls4")
@@ -39,6 +40,5 @@ layout_mode = 2
 metadata/_tab_index = 1
 
 [node name="ModList" parent="TabContainer" instance=ExtResource("6_2a143")]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 2

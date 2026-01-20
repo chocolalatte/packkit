@@ -4,11 +4,15 @@ using System.Linq;
 using Godot;
 using Packkit.Globals;
 using Packkit.Manifest;
+using Packkit.Tags;
 
 namespace Packkit.Godot;
 
 public partial class ModList : Control
 {
+    [Export]
+    public OptionButton TagListOptionButton;
+
     [Export]
     public VBoxContainer ModEntryContainer;
 
@@ -21,12 +25,29 @@ public partial class ModList : Control
     public static IEnumerable<ModRef> ModRefs =>
         Mods?.Select(kvp => new ModRef(kvp.Key, kvp.Value));
 
+    private readonly Dictionary<int, TagDefinitions.SimpleTagDefinition> SimpleTags = [];
+
     public override void _Ready()
     {
-        PackManager.PackManagerInstance.ActivePackChanged += PopulateModList;
+        PackManager.PackManagerInstance.ActivePackChanged += UpdateModList;
     }
 
-    public void PopulateModList()
+    public void UpdateModList()
+    {
+        PopulateModList();
+        PopulateTagList();
+    }
+
+    private void PopulateTagList()
+    {
+        foreach (var tag in PackManager.ActivePack?.Item2.Customization.Tags.SimpleTags)
+        {
+            TagListOptionButton.AddItem(tag.Name);
+            SimpleTags.Add(TagListOptionButton.GetItemCount() - 1, tag);
+        }
+    }
+
+    private void PopulateModList()
     {
         GD.Print($"[MODLIST] [INFO] Populating mod list");
         foreach (var child in ModEntryContainer.GetChildren())
@@ -94,5 +115,10 @@ public partial class ModList : Control
         }
 
         PackManager.ToggleModsEnabled(packId, modHashes);
+    }
+
+    private void _on_option_button_item_selected(int index)
+    {
+        GD.Print($"[MODLIST] [INFO] Option button selected: {SimpleTags[index].Name}");
     }
 }
