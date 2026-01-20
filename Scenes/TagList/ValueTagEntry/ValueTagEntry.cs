@@ -15,6 +15,8 @@ public partial class ValueTagEntry : HBoxContainer
     [Export]
     private Label TagNameLabel;
 
+    private bool isChanged = false;
+
     public ValueTagDefinition Tag;
 
     public void Initialize(ValueTagDefinition tag)
@@ -33,21 +35,42 @@ public partial class ValueTagEntry : HBoxContainer
         else
         {
             throw new NotImplementedException(
-                $"[TAGENTRY:VALUETAGENTRY] Unsupported tag type: {Tag.Type}"
+                $"[TAGENTRY:VALUETAGENTRY] [ERROR-001] Unsupported tag type: {Tag.Type}"
             );
         }
     }
 
     public object GetValue()
     {
-        return Tag.Type switch
+        if (Tag.Type == ValueTagType.Integer || Tag.Type == ValueTagType.Float)
         {
-            ValueTagType.Integer => NumberInput.Value,
-            ValueTagType.Float => NumberInput.Value,
-            ValueTagType.String => TextInput.Text,
-            _ => throw new NotImplementedException(
-                $"[TAGENTRY:VALUETAGENTRY] Unsupported tag type: {Tag.Type}"
-            ),
-        };
+            return NumberInput.Value;
+        }
+        else if (Tag.Type == ValueTagType.String)
+        {
+            if (TextInput.Text != "")
+            {
+                return TextInput.Text;
+            }
+
+            throw new Exception(
+                $"[TAGENTRY:VALUETAGENTRY] [ERROR-002] Value for string type ValueTag \"{Tag.Name}\" is empty"
+            );
+        }
+        else
+        {
+            throw new NotImplementedException(
+                $"[TAGENTRY:VALUETAGENTRY] [ERROR-003] Unsupported tag type: {Tag.Type}"
+            );
+        }
+    }
+
+    private void _on_number_input_value_changed(int value) => isChanged = true;
+
+    private void _on_hidden()
+    {
+        isChanged = false;
+        TextInput.Text = "";
+        NumberInput.Value = 0;
     }
 }

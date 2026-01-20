@@ -18,8 +18,12 @@ visible = false
 layout_mode = 2
 allow_greater = true
 allow_lesser = true
+update_on_text_changed = true
 
 [node name="TextInput" type="LineEdit" parent="."]
 visible = false
 layout_mode = 2
 placeholder_text = "Value"
+
+[connection signal="hidden" from="." to="." method="_on_hidden"]
+[connection signal="value_changed" from="NumberInput" to="." method="_on_number_input_value_changed"]

@@ -15,3 +15,9 @@ text = "TagName"
 
 [node name="OptionButton" type="OptionButton" parent="."]
 layout_mode = 2
+selected = 0
+item_count = 1
+popup/item_0/text = "none"
+popup/item_0/id = 0
+
+[connection signal="hidden" from="." to="." method="_on_hidden"]
