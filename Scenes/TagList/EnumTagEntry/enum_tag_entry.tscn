@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://cra0utpb16m6c"]
+
+[ext_resource type="Script" uid="uid://bxb2d7pw2vyyf" path="res://Scenes/TagList/EnumTagEntry/EnumTagEntry.cs" id="1_blehe"]
+
+[node name="EnumTagEntry" type="HBoxContainer" node_paths=PackedStringArray("TagNameLabel", "optionButton")]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_blehe")
+TagNameLabel = NodePath("Label")
+optionButton = NodePath("OptionButton")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "TagName"
+
+[node name="OptionButton" type="OptionButton" parent="."]
+layout_mode = 2

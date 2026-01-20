@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Godot;
 using Packkit.Globals;
+using Packkit.Godot.Nodes;
 using Packkit.Godot.TagEntry;
 using static Packkit.Tags.TagDefinitions;
 
@@ -15,6 +16,9 @@ public partial class TagList : Popup
 
     [Export]
     private PackedScene ValueTagEntryScene;
+
+    [Export]
+    private PackedScene EnumTagEntryScene;
 
     [Export]
     private VBoxContainer TagEntryContainer;
@@ -36,6 +40,11 @@ public partial class TagList : Popup
         {
             AddValueTag(tag);
         }
+
+        foreach (var tag in PackManager.ActivePack?.Item2.Customization.Tags.EnumTags)
+        {
+            AddEnumTag(tag);
+        }
     }
 
     private void AddSimpleTag(SimpleTagDefinition tag)
@@ -50,5 +59,12 @@ public partial class TagList : Popup
         ValueTagEntry valueTagEntry = (ValueTagEntry)ValueTagEntryScene.Instantiate();
         valueTagEntry.Initialize(tag);
         TagEntryContainer.AddChild(valueTagEntry);
+    }
+
+    private void AddEnumTag(EnumTagDefinition tag)
+    {
+        EnumTagEntry enumTagEntry = (EnumTagEntry)EnumTagEntryScene.Instantiate();
+        enumTagEntry.Initialize(tag);
+        TagEntryContainer.AddChild(enumTagEntry);
     }
 }

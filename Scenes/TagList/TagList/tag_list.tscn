@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://baf2iwnbko8ik"]
+[gd_scene load_steps=6 format=3 uid="uid://baf2iwnbko8ik"]
 
 [ext_resource type="Theme" uid="uid://3hr4w4qvr5wt" path="res://Themes/tag_list.tres" id="1_ukp8w"]
 [ext_resource type="Script" uid="uid://p5kb4r5huwl4" path="res://Scenes/TagList/TagList/TagList.cs" id="1_xpa8u"]
 [ext_resource type="PackedScene" uid="uid://cpnloi1qxa7fe" path="res://Scenes/TagList/SimpleTagEntry/simple_tag_entry.tscn" id="2_34c6y"]
 [ext_resource type="PackedScene" uid="uid://bfqxjhm5qmsnx" path="res://Scenes/TagList/ValueTagEntry/value_tag_entry.tscn" id="4_e3xyx"]
+[ext_resource type="PackedScene" uid="uid://cra0utpb16m6c" path="res://Scenes/TagList/EnumTagEntry/enum_tag_entry.tscn" id="5_vnt8e"]
 
 [node name="TagList" type="Popup" node_paths=PackedStringArray("TagEntryContainer")]
 oversampling_override = 1.0
@@ -15,6 +16,7 @@ theme = ExtResource("1_ukp8w")
 script = ExtResource("1_xpa8u")
 SimpleTagEntryScene = ExtResource("2_34c6y")
 ValueTagEntryScene = ExtResource("4_e3xyx")
+EnumTagEntryScene = ExtResource("5_vnt8e")
 TagEntryContainer = NodePath("PanelContainer/ScrollContainer/TagListEntryContainer")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
