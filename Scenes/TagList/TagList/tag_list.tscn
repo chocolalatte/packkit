@@ -32,3 +32,11 @@ layout_mode = 2
 
 [node name="TagListEntryContainer" type="VBoxContainer" parent="PanelContainer/ScrollContainer"]
 layout_mode = 2
+
+[node name="ApplyTagsButton" type="Button" parent="PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Apply Tags"
+
+[connection signal="pressed" from="PanelContainer/ApplyTagsButton" to="." method="_on_apply_tags_button_pressed"]

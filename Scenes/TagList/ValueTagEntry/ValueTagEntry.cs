@@ -15,17 +15,17 @@ public partial class ValueTagEntry : HBoxContainer
     [Export]
     private Label TagNameLabel;
 
-    public ValueTagType TagType;
+    public ValueTagDefinition Tag;
 
     public void Initialize(ValueTagDefinition tag)
     {
-        TagType = tag.Type;
-        TagNameLabel.Text = tag.Name;
-        if (tag.Type == ValueTagType.Integer || tag.Type == ValueTagType.Float)
+        Tag = tag;
+        TagNameLabel.Text = Tag.Name;
+        if (Tag.Type == ValueTagType.Integer || Tag.Type == ValueTagType.Float)
         {
             NumberInput.Visible = true;
         }
-        else if (tag.Type == ValueTagType.String)
+        else if (Tag.Type == ValueTagType.String)
         {
             GD.Print("string type");
             TextInput.Visible = true;
@@ -33,8 +33,21 @@ public partial class ValueTagEntry : HBoxContainer
         else
         {
             throw new NotImplementedException(
-                $"[TAGENTRY:VALUETAGENTRY] Unsupported tag type: {tag.Type}"
+                $"[TAGENTRY:VALUETAGENTRY] Unsupported tag type: {Tag.Type}"
             );
         }
+    }
+
+    public object GetValue()
+    {
+        return Tag.Type switch
+        {
+            ValueTagType.Integer => NumberInput.Value,
+            ValueTagType.Float => NumberInput.Value,
+            ValueTagType.String => TextInput.Text,
+            _ => throw new NotImplementedException(
+                $"[TAGENTRY:VALUETAGENTRY] Unsupported tag type: {Tag.Type}"
+            ),
+        };
     }
 }

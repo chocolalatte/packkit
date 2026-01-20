@@ -14,6 +14,8 @@ public partial class SimpleTagEntry : HBoxContainer
 
     public SimpleTagDefinition Tag;
 
+    public bool IsSelected => IsSelectedCheckBox.ButtonPressed;
+
     public void Initialize(SimpleTagDefinition tag)
     {
         Tag = tag;

@@ -2,6 +2,19 @@ namespace Packkit.Tags;
 
 public static class TagDefinitions
 {
+    // Helper classes
+    public sealed class ValueTagInstance(ValueTagDefinition definition, object value)
+    {
+        public ValueTagDefinition Definition = definition;
+        public object Value = value;
+    }
+
+    public sealed class EnumTagInstance(EnumTagDefinition definition, string value)
+    {
+        public EnumTagDefinition Definition = definition;
+        public string Value = value;
+    }
+
     // Simple user defined tag, e.g. "technology", "decoration", etc.
     public class SimpleTagDefinition
     {

@@ -10,12 +10,20 @@ public partial class EnumTagEntry : HBoxContainer
     [Export]
     private OptionButton optionButton;
 
+    public EnumTagDefinition Tag;
+
     public void Initialize(EnumTagDefinition tag)
     {
-        TagNameLabel.Text = tag.Name;
-        foreach (string option in tag.Options)
+        Tag = tag;
+        TagNameLabel.Text = Tag.Name;
+        foreach (string option in Tag.Options)
         {
             optionButton.AddItem(option);
         }
+    }
+
+    public string GetValue()
+    {
+        throw new NotImplementedException();
     }
 }
